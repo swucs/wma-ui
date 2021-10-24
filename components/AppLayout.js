@@ -40,7 +40,7 @@ const AppLayout = ({ children }) => {
             </Sider>
             <Layout>
                 {/* <Header className="site-layout-sub-header-background" style={{ padding: 0 }} /> */}
-                <Content style={{ margin: '45px 10px 0' }}>
+                <Content style={{ margin: '45px 5px 0' }}>
                     <div className="site-layout-background" style={{ minHeight: 360 }}>
                         {children}
                     </div>

@@ -1,116 +1,105 @@
 import React from 'react';
 import { Table, Tag, Space } from 'antd';
+import { useEffect, useState } from 'react';
 
-const CustomerList = () => {
+const CustomerList = ({ data }) => {
+
+	const [scrollY, setScrollY] = useState([]);
+
+	const handleResize = () => {
+		console.log("handleResize: " + window.innerHeight);
+		setScrollY(window.innerHeight - 218);
+	}
+
+	useEffect(() => {
+		//최초실행
+		handleResize();
+		//resize시 실행
+		window.addEventListener('resize', handleResize);
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		}
+	}, []);
 
     const columns = [
-        {
-          title: 'ID',
-          dataIndex: 'id',
-          key: 'id',
-          align: 'center',
-          fixed: 'left',
-          width: 70,
-        },
         {
           title: '업체명',
           dataIndex: 'name',
           key: 'name',
           align: 'left',
+		  width: 210,
           render: text => <a>{text}</a>,
-          fixed: 'left',
-          width: 200,
+        },
+		{
+            title: '전화번호',
+            dataIndex: 'phoneNumber',
+            key: 'addphoneNumberess',
+			align: 'center',
         },
         {
           title: '사업자번호',
-          dataIndex: 'address',
-          key: 'address',
+          dataIndex: 'businessNumber',
+          key: 'businessNumber',
           align: 'center',
         },
         {
             title: '대표자',
-            dataIndex: 'address',
-            key: 'address',
+            dataIndex: 'representativeName',
+            key: 'representativeName',
             align: 'center',
         },
         {
-            title: '전화번호',
-            dataIndex: 'address',
-            key: 'address',
-        },
-        {
             title: 'Fax',
-            dataIndex: 'address',
-            key: 'address',
+            dataIndex: 'faxNumber',
+            key: 'faxNumber',
+			align: 'center',
         },
         {
           title: '업태',
-          key: 'tags',
-          dataIndex: 'tags',
-          render: tags => (
-            <>
-              {tags.map(tag => {
-                let color = tag.length > 5 ? 'geekblue' : 'green';
-                if (tag === 'loser') {
-                  color = 'volcano';
-                }
-                return (
-                  <Tag color={color} key={tag}>
-                    {tag.toUpperCase()}
-                  </Tag>
-                );
-              })}
-            </>
-          ),
+          key: 'businessConditions',
+          dataIndex: 'businessConditions',
+        //   render: tags => (
+        //     <>
+        //       {tags.map(tag => {
+        //         let color = tag.length > 5 ? 'geekblue' : 'green';
+        //         if (tag === 'loser') {
+        //           color = 'volcano';
+        //         }
+        //         return (
+        //           <Tag color={color} key={tag}>
+        //             {tag.toUpperCase()}
+        //           </Tag>
+        //         );
+        //       })}
+        //     </>
+        //   ),
         },
         {
             title: '종목',
-            dataIndex: 'address',
-            key: 'address',
+            dataIndex: 'typeOfBusiness',
+            key: 'typeOfBusiness',
         },
         {
             title: '사용여부',
-            dataIndex: 'address',
+            dataIndex: 'use',
             key: 'address',
+			align: 'center',
+			render: use => (
+				<>
+					{use ? "사용" : "미사용"}
+				</>
+			)
         },
-        // {
-        //   title: 'Action',
-        //   key: 'action',
-        //   render: (text, record) => (
-        //     <Space size="middle">
-        //       <a>Invite {record.name}</a>
-        //       <a>Delete</a>
-        //     </Space>
-        //   ),
-        // },
-      ];
+    ];
       
-      const data = [
-        {
-          id: '1',
-          name: 'New York No. 1 Lake Par',
-          age: 32,
-          address: '110-22-33455',
-          tags: ['nice', 'developer'],
-        },
-        {
-            id: '2',
-          name: 'London No. 1 Lake Park',
-          age: 42,
-          address: '110-22-33455',
-          tags: ['loser'],
-        },
-        {
-            id: '3',
-          name: 'Sidney No. 1 Lake Park',
-          age: 32,
-          address: '110-22-33455',
-          tags: ['cool', 'teacher'],
-        },
-      ];
-
     return (
-        <Table columns={columns} dataSource={data} scroll={{ x: 1300 }} />
+        <Table 
+			columns={columns}
+			dataSource={data}
+			scroll={{ x: 1300, y: scrollY}} 
+			pagination={false /*{position: ['none', 'bottomCenter']}*/}
+			
+		/>
     );
 };
 

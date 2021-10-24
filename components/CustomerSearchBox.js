@@ -14,7 +14,7 @@ const CustomerSearchBox = () => {
     return (
         <Form
                 form={form}
-                name="advanced_search"
+                name="advanced_search"				 
                 className="ant-advanced-search-form"
                 // onFinish={handleSubmit}
             >
@@ -22,7 +22,7 @@ const CustomerSearchBox = () => {
             <Space direction="vertical">
                 <Search
                     type="text"
-                    placeholder="input search text"
+                    placeholder="업체명"
                     enterButton="Search"
                     allowClear
                     size="large"
