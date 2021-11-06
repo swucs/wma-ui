@@ -27,9 +27,9 @@ const customer = () => {
 
 		axios.get(`${process.env.NEXT_PUBLIC_API_URL}/customer/api/customers?page=0&pageSize=100`)
 		.then((response) => {
-			console.log(response.data.content);
+			console.log(response.data);
 			
-			setData(response.data.content);
+			setData(response.data._embedded.searchCustomerResponseList);
 
 			//로딩바 감추기
 			// setLoading(false);
