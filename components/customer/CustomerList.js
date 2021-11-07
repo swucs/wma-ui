@@ -1,15 +1,52 @@
 import React from 'react';
 import { Table, Tag, Space } from 'antd';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDetailCustomer, setDetailModalVisible } from '../../reducers/customerStore';
 
-const CustomerList = ({ data }) => {
+const CustomerList = () => {
 
+	const [newData, setNewData] = useState([]);
 	const [scrollY, setScrollY] = useState([]);
 
+	const dispatch = useDispatch();
+
+	//Redux State로 부터 고객목록 모니터링
+	const customers = useSelector((state) => state.customerStore.customers);
+
+	/**
+	 * 그리드의 높이를 지정
+	 */
 	const handleResize = () => {
 		console.log("handleResize: " + window.innerHeight);
 		setScrollY(window.innerHeight - 218);
 	}
+
+	/**
+	 * 업체명 클릭
+	 */
+	const handlerClickName = (customer) => {
+		//상세정보 세팅
+		dispatch(setDetailCustomer(customer));
+		//상세팝업창 띄우기
+		dispatch(setDetailModalVisible(true));
+	}
+
+	useEffect(() => {
+		if (!customers) {
+			return;
+		}
+
+        setNewData(customers.map((v) => {
+            return {
+                ...v,
+                key: v.id,
+            };
+        }));
+
+        console.log('newData', newData);
+
+    }, [customers]);
 
 	useEffect(() => {
 		//최초실행
@@ -19,6 +56,7 @@ const CustomerList = ({ data }) => {
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		}
+		
 	}, []);
 
     const columns = [
@@ -28,7 +66,7 @@ const CustomerList = ({ data }) => {
           key: 'name',
           align: 'left',
 		  width: 210,
-          render: text => <a>{text}</a>,
+          render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
         },
 		{
             title: '전화번호',
@@ -43,7 +81,7 @@ const CustomerList = ({ data }) => {
           align: 'center',
         },
         {
-            title: '대표자',
+            title: '대표자명',
             dataIndex: 'representativeName',
             key: 'representativeName',
             align: 'center',
@@ -58,24 +96,9 @@ const CustomerList = ({ data }) => {
           title: '업태',
           key: 'businessConditions',
           dataIndex: 'businessConditions',
-        //   render: tags => (
-        //     <>
-        //       {tags.map(tag => {
-        //         let color = tag.length > 5 ? 'geekblue' : 'green';
-        //         if (tag === 'loser') {
-        //           color = 'volcano';
-        //         }
-        //         return (
-        //           <Tag color={color} key={tag}>
-        //             {tag.toUpperCase()}
-        //           </Tag>
-        //         );
-        //       })}
-        //     </>
-        //   ),
         },
         {
-            title: '종목',
+            title: '업종',
             dataIndex: 'typeOfBusiness',
             key: 'typeOfBusiness',
         },
@@ -95,7 +118,7 @@ const CustomerList = ({ data }) => {
     return (
         <Table 
 			columns={columns}
-			dataSource={data}
+			dataSource={newData}
 			scroll={{ x: 1300, y: scrollY}} 
 			pagination={false /*{position: ['none', 'bottomCenter']}*/}
 			

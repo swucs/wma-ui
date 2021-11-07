@@ -5,7 +5,7 @@ import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/i
 
 const { Header, Content, Footer, Sider } = Layout;
 
-React.useLayoutEffect = React.useEffect;
+// React.useLayoutEffect = React.useEffect;
 
 
 const AppLayout = ({ children }) => {    
