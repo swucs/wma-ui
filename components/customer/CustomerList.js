@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Tag, Space } from 'antd';
+import { Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDetailCustomer, setDetailModalVisible } from '../../reducers/customerStore';
@@ -13,6 +13,7 @@ const CustomerList = () => {
 
 	//Redux State로 부터 고객목록 모니터링
 	const customers = useSelector((state) => state.customerStore.customers);
+	const isListLoadingBar = useSelector((state) => state.customerStore.isListLoadingBar);
 
 	/**
 	 * 그리드의 높이를 지정
@@ -119,6 +120,7 @@ const CustomerList = () => {
         <Table 
 			columns={columns}
 			dataSource={newData}
+			loading={isListLoadingBar}
 			scroll={{ x: 1300, y: scrollY}} 
 			pagination={false /*{position: ['none', 'bottomCenter']}*/}
 			

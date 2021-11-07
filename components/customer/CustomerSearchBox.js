@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 // import { searchScreener } from "../reducers";
 import { Button, Col, Row, Form, Input, InputNumber, Space } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
-import { setDetailCustomer, setDetailModalVisible } from '../../reducers/customerStore';
+import { queryCustomers, setDetailCustomer, setDetailModalVisible } from '../../reducers/customerStore';
 
 
 const { Search } = Input;
@@ -15,12 +15,18 @@ const CustomerSearchBox = () => {
 
     const [form] = Form.useForm();
 
+	//신규버튼
 	const handleClick = () => {
 		//비어있는 상세정보 세팅
 		dispatch(setDetailCustomer({use : true}));
 
 		//상세팝업 띄우기
 		dispatch(setDetailModalVisible(true));
+	}
+
+	//검색처리
+	const handleSearch = (value) => {
+		dispatch(queryCustomers({name : value}));
 	}
 
     return (
@@ -38,13 +44,13 @@ const CustomerSearchBox = () => {
 						allowClear
 						size="large"
 						//   suffix={suffix}
-						//   onSearch={onSearch}
+						  onSearch={handleSearch}
 						/>
 					
 					<Button 
 						icon={<PlusOutlined />}
 						size="large"
-						type="primary"
+						// type="primary"
 						onClick={handleClick} />
 				</Space>
         </Form>

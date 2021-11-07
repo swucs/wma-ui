@@ -1,13 +1,12 @@
 const initialState = {
     searchWord: {
         name: null,
-        deptRate: null,
-        epsRate: null,
-        roeRate: null,
     }, 
 	isDetailModalVisible: false,	//상세 Modal창 출력여부
 	customers: [],					//고객목록
-	detailCustomer: {}				//고객상세데이터
+	detailCustomer: {},				//고객상세데이터
+	isListLoadingBar: false,		//목록 로딩바
+	isDetailLoadingBar: false,		//상세 로딩바
 };
 
 
@@ -23,6 +22,14 @@ export const queryCustomers = (data) => {
 export const setCustomers = (data) => {
     return {
         type: 'SET_CUSTOMERS',
+        data
+    };
+};
+
+//목록 로딩바 출력
+export const setListLoadingBar = (data) => {
+    return {
+        type: 'SET_LIST_LOADING_BAR',
         data
     };
 };
@@ -43,6 +50,14 @@ export const setDetailCustomer = (data) => {
     };
 };
 
+//상세팝업 로딩바 출력
+export const setDetailLoadingBar = (data) => {
+    return {
+        type: 'SET_DETAIL_LOADING_BAR',
+        data
+    };
+};
+
 
 export const customerStore = (state = initialState, action) => {
     switch (action.type) {
@@ -51,9 +66,6 @@ export const customerStore = (state = initialState, action) => {
                 ...state,
                 searchWord: {
                     name: action.data.name,
-                    deptRate: action.data.deptRate,
-                    epsRate: action.data.epsRate,
-                    roeRate: action.data.roeRate
                 }
             }
         }
@@ -63,6 +75,12 @@ export const customerStore = (state = initialState, action) => {
                 customers: [...action.data],
             }
         }
+		case 'SET_LIST_LOADING_BAR': {
+			return {
+                ...state,
+                isListLoadingBar: action.data,
+            }
+		}
 		case 'SET_DETAIL_MODAL_VISIBLE': {
             return {
                 ...state,
@@ -75,6 +93,12 @@ export const customerStore = (state = initialState, action) => {
                 detailCustomer: {...action.data},
             }
         }
+		case 'SET_DETAIL_LOADING_BAR': {
+			return {
+                ...state,
+                isDetailLoadingBar: action.data,
+            }
+		}
         default: {
             return {
                 ...state,

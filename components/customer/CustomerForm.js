@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, Divider, Space, message } from 'antd';
+import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin } from 'antd';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCustomers, setDetailCustomer, setDetailModalVisible } from '../../reducers/customerStore';
+import { setCustomers, setDetailCustomer, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/customerStore';
 
 const { Option } = Select;
 
@@ -30,6 +30,7 @@ const CustomerForm = () => {
 	const isDetailModalVisible = useSelector(state => state.customerStore.isDetailModalVisible);	//상세팝업출력여부
 	const detailCustomer = useSelector(state => state.customerStore.detailCustomer);				//상세고객정보
 	const customers = useSelector(state => state.customerStore.customers);							//고객목록
+	const isDetailLoadingBar = useSelector(state => state.customerStore.isDetailLoadingBar);		//상세정보 로딩바
 
 
 	const [form] = Form.useForm();
@@ -41,6 +42,9 @@ const CustomerForm = () => {
         axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8';
         axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
 
+		//로딩바
+		dispatch(setDetailLoadingBar(true));
+
 		if (!detailCustomer.id) {
 			//고객정보 생성
 			axios.post(`${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer`
@@ -48,6 +52,9 @@ const CustomerForm = () => {
 			.then((response) => {
 				console.log(response.data);
 				
+				//로딩바 감추기
+				dispatch(setDetailLoadingBar(false));
+
 				message.success('고객정보가 생성되었습니다.');
 
 				//목록에 추가하기
@@ -56,11 +63,11 @@ const CustomerForm = () => {
 				//팝업창 닫기
 				dispatch(setDetailModalVisible(false));
 
-				//로딩바 감추기
-				// setLoading(false);
 			})
 			.catch((error) => {
 				alert('에러발생 : CustomerForm.js');
+				//로딩바 감추기
+				dispatch(setDetailLoadingBar(false));
 				console.log(error);
 			});
 		} else {
@@ -70,6 +77,9 @@ const CustomerForm = () => {
 			.then((response) => {
 				console.log(response.data);
 				
+				//로딩바 감추기
+				dispatch(setDetailLoadingBar(false));
+
 				message.success('고객정보가 수정되었습니다.');
 
 				//목록 갱신하기
@@ -82,11 +92,11 @@ const CustomerForm = () => {
 				//상세정보 갱신
 				dispatch(setDetailCustomer({...response.data}));
 
-				//로딩바 감추기
-				// setLoading(false);
 			})
 			.catch((error) => {
 				alert('에러발생 : CustomerForm.js');
+				//로딩바 감추기
+				dispatch(setDetailLoadingBar(false));
 				console.log(error);
 			});
 
@@ -112,6 +122,7 @@ const CustomerForm = () => {
 			onCancel={handleConfirmCancel}
 			destroyOnClose={true}	//이 옵션이 있어야 모달이 닫힐 때 객체들이 destory되는듯
 		>
+			<Spin tip="Loading..." spinning={isDetailLoadingBar}>
 			<Form 
 				name="complex-form"
 				onFinish={onFinish} 
@@ -274,6 +285,7 @@ const CustomerForm = () => {
 				{/* </Form.Item> */}
 				
 			</Form>
+			</Spin>
 		</Modal>
 		
 
