@@ -27,7 +27,7 @@ build-wms-ui:
 dockerize-wms-ui:
   stage: dockerize
   script:
-    - docker build -f wms-ui/Dockerfile --tag registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID .
+    - docker build -f Dockerfile --tag registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID .
     - docker push registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID
     - docker rmi registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID
   only:
