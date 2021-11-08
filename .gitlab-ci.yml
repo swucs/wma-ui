@@ -1,3 +1,9 @@
+stages:
+  - build
+  - dockerize
+  - deploy
+
+
 build-wms-ui:
   stage: build
   script:
