@@ -7,12 +7,12 @@ build-wms-ui:
   cache:
     key: ${CI_COMMIT_REF_SLUG} # 이 브랜치(master)에서 만들어둔 cache를 사용한다
     paths:
-      - wms-ui/node_modules/* # cache할 디렉토리를 정의한다
+      - node_modules/* # cache할 디렉토리를 정의한다
   artifacts:
     paths:
-      - wms-ui/.next/*
-      - wms-ui/node_modules/*
-      - wms-ui/package.json
+      - .next/*
+      - node_modules/*
+      - package.json
     expire_in: 1 week
   only:
     - main
@@ -22,7 +22,7 @@ build-wms-ui:
 dockerize-wms-ui:
   stage: dockerize
   script:
-    - docker build -f wms-ui/Dockerfile --build-arg MODULE=wms-ui --tag registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID .
+    - docker build -f wms-ui/Dockerfile --tag registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID .
     - docker push registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID
     - docker rmi registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID
   only:

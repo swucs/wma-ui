@@ -6,14 +6,14 @@ WORKDIR /app
 ENV TZ=Asia/Seoul
 
 #Gitlab 모듈 경로
-ARG MODULE=wms-ui
+# ARG MODULE=wms-ui
 #Build 결과 파일 경로
 # ARG BUILD_DIR=${MODULE}/.next
 
 # gitlab artifacts에 생성된 파일들 복사
-COPY ${MODULE}/.next/ 			./.next/
-COPY ${MODULE}/node_modules/ 	./node_modules/
-COPY ${MODULE}/package.json 	./
+COPY .next/ 		./.next/
+COPY node_modules/ 	./node_modules/
+COPY package.json 	./
 
 
 # 앱 실행
