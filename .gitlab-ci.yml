@@ -44,8 +44,10 @@ deploy-wms-ui:
     - ssh angryant@172.30.1.28 "docker image prune -a -f"
     - ssh angryant@172.30.1.28 "docker run -d -p 3001:3000 --name wms-ui --rm registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID "
   only:
-    - master
+    - main
   tags:
     - deploy
   needs: [dockerize-wms-ui]
   when: manual
+
+  #내부 컨테이너는 3000번 포트를 유지하되, 외부에서는 3001로 접속한다(AngryAnt UI 포트와 충돌).
