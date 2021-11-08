@@ -1,0 +1,46 @@
+build-wms-ui:
+  stage: build
+  script:
+    #- cd wms-ui
+    - npm install # cache가 있고 package.json이 변경되지 않았으면, cache로 저장된 파일(압축 저장되어 있음)을 사용한다. 되는거임?? 잘모르겠음.
+    - npm run build
+  cache:
+    key: ${CI_COMMIT_REF_SLUG} # 이 브랜치(master)에서 만들어둔 cache를 사용한다
+    paths:
+      - wms-ui/node_modules/* # cache할 디렉토리를 정의한다
+  artifacts:
+    paths:
+      - wms-ui/.next/*
+      - wms-ui/node_modules/*
+      - wms-ui/package.json
+    expire_in: 1 week
+  only:
+    - main
+  tags:
+    - build
+
+dockerize-wms-ui:
+  stage: dockerize
+  script:
+    - docker build -f wms-ui/Dockerfile --build-arg MODULE=wms-ui --tag registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID .
+    - docker push registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID
+    - docker rmi registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID
+  only:
+    - main
+  tags:
+    - dockerize
+  needs: [build-wms-ui]
+
+deploy-wms-ui:
+  stage: deploy
+  script:
+    - ssh angryant@172.30.1.28 "docker pull registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID"
+    - ssh angryant@172.30.1.28 "docker ps -q --filter name="wms-ui" | xargs -r docker stop"
+    - ssh angryant@172.30.1.28 "docker image prune -a -f"
+    - ssh angryant@172.30.1.28 "docker run -d -p 3000:3000 --name wms-ui --rm registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID "
+  only:
+    - master
+  tags:
+    - deploy
+  needs: [dockerize-wms-ui]
+  when: manual
