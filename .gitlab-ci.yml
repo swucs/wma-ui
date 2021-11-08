@@ -3,7 +3,6 @@ stages:
   - dockerize
   - deploy
 
-
 build-wms-ui:
   stage: build
   script:
@@ -43,7 +42,7 @@ deploy-wms-ui:
     - ssh angryant@172.30.1.28 "docker pull registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID"
     - ssh angryant@172.30.1.28 "docker ps -q --filter name="wms-ui" | xargs -r docker stop"
     - ssh angryant@172.30.1.28 "docker image prune -a -f"
-    - ssh angryant@172.30.1.28 "docker run -d -p 3000:3000 --name wms-ui --rm registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID "
+    - ssh angryant@172.30.1.28 "docker run -d -p 3001:3000 --name wms-ui --rm registry.sungbae.net/shinyoung/wms-ui:$CI_PIPELINE_IID "
   only:
     - master
   tags:
