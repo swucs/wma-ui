@@ -28,8 +28,8 @@ const CustomerForm = () => {
 
 	const dispatch = useDispatch();
 	const isDetailModalVisible = useSelector(state => state.customerStore.isDetailModalVisible);	//상세팝업출력여부
-	const detailCustomer = useSelector(state => state.customerStore.detailCustomer);				//상세고객정보
-	const customers = useSelector(state => state.customerStore.customers);							//고객목록
+	const detailCustomer = useSelector(state => state.customerStore.detailCustomer);				//상세거래처정보
+	const customers = useSelector(state => state.customerStore.customers);							//거래처목록
 	const isDetailLoadingBar = useSelector(state => state.customerStore.isDetailLoadingBar);		//상세정보 로딩바
 
 
@@ -46,7 +46,7 @@ const CustomerForm = () => {
 		dispatch(setDetailLoadingBar(true));
 
 		if (!detailCustomer.id) {
-			//고객정보 생성
+			//거래처정보 생성
 			axios.post(`${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer`
 				, customer)
 			.then((response) => {
@@ -55,7 +55,7 @@ const CustomerForm = () => {
 				//로딩바 감추기
 				dispatch(setDetailLoadingBar(false));
 
-				message.success('고객정보가 생성되었습니다.');
+				message.success('거래처정보가 생성되었습니다.');
 
 				//목록에 추가하기
 				dispatch(setCustomers([...customers, {...response.data}]));
@@ -71,7 +71,7 @@ const CustomerForm = () => {
 				console.log(error);
 			});
 		} else {
-			//고객정보 수정
+			//거래처정보 수정
 			axios.put(`${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer/${detailCustomer.id}`
 				, customer)
 			.then((response) => {
@@ -80,7 +80,7 @@ const CustomerForm = () => {
 				//로딩바 감추기
 				dispatch(setDetailLoadingBar(false));
 
-				message.success('고객정보가 수정되었습니다.');
+				message.success('거래처정보가 수정되었습니다.');
 
 				//목록 갱신하기
 				dispatch(setCustomers(
@@ -116,7 +116,7 @@ const CustomerForm = () => {
 	return (
 		<Modal 
 			form={form}
-			title="고객정보"
+			title="거래처정보"
 			visible={isDetailModalVisible} 
 			footer={null}
 			onCancel={handleConfirmCancel}

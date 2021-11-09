@@ -11,7 +11,7 @@ const CustomerList = () => {
 
 	const dispatch = useDispatch();
 
-	//Redux State로 부터 고객목록 모니터링
+	//Redux State로 부터 거래처목록 모니터링
 	const customers = useSelector((state) => state.customerStore.customers);
 	const isListLoadingBar = useSelector((state) => state.customerStore.isListLoadingBar);
 

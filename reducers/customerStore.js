@@ -3,8 +3,8 @@ const initialState = {
         name: null,
     }, 
 	isDetailModalVisible: false,	//상세 Modal창 출력여부
-	customers: [],					//고객목록
-	detailCustomer: {},				//고객상세데이터
+	customers: [],					//거래처목록
+	detailCustomer: {},				//거래처상세데이터
 	isListLoadingBar: false,		//목록 로딩바
 	isDetailLoadingBar: false,		//상세 로딩바
 };
@@ -18,7 +18,7 @@ export const queryCustomers = (data) => {
     };
 };
 
-//고객목록 출력
+//거래처목록 출력
 export const setCustomers = (data) => {
     return {
         type: 'SET_CUSTOMERS',
@@ -42,7 +42,7 @@ export const setDetailModalVisible = (data) => {
     };
 };
 
-//상세 고객정보 세팅
+//상세 거래처정보 세팅
 export const setDetailCustomer = (data) => {
     return {
         type: 'SET_DETAIL_CUSTOMER',
