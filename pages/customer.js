@@ -4,7 +4,7 @@ import AppLayout from "../components/AppLayout";
 import CustomerSearchBox from "../components/customer/CustomerSearchBox";
 import CustomerList from "../components/customer/CustomerList";
 import { useEffect } from 'react';
-import axios from 'axios';
+import axiosUtil from "../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
 import CustomerForm from '../components/customer/CustomerForm';
 import { setCustomers, setListLoadingBar } from '../reducers/customerStore';
@@ -23,19 +23,15 @@ const customer = () => {
 
         console.log('searchWord', searchWord);
 
-        axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_URL}`;
-        axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8';
-        axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-
-		axios.get(`${process.env.NEXT_PUBLIC_API_URL}/customer/api/customers`, 
-			{
-				params : {
-					page : 0,
-					pageSize : 1000,
-					name : searchWord.name
-				}
+		axiosUtil({
+			url : `${process.env.NEXT_PUBLIC_API_URL}/customer/api/customers`,
+			method : 'get',
+			params : {
+				page : 0,
+				pageSize : 1000,
+				name : searchWord.name
 			}
-		)
+		})
 		.then((response) => {
 			console.log('response.data : ' + response.data);
 			
@@ -48,6 +44,7 @@ const customer = () => {
 			alert('에러발생 : screener.js');
 			console.log(error);
 		});
+
     }, [ searchWord ]);
 
     

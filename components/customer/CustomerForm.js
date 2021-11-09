@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin } from 'antd';
-import axios from 'axios';
+import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin, Popconfirm } from 'antd';
+import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
 import { setCustomers, setDetailCustomer, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/customerStore';
 
@@ -38,17 +38,17 @@ const CustomerForm = () => {
 	const onFinish = (customer) => {
 		// alert(JSON.stringify(customer));
 
-		axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_URL}`;
-        axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8';
-        axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
 
 		//로딩바
 		dispatch(setDetailLoadingBar(true));
 
 		if (!detailCustomer.id) {
 			//거래처정보 생성
-			axios.post(`${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer`
-				, customer)
+			axiosUtil({
+				url : `${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer`,
+				method : 'post',
+				data : customer
+			})
 			.then((response) => {
 				console.log(response.data);
 				
@@ -72,8 +72,11 @@ const CustomerForm = () => {
 			});
 		} else {
 			//거래처정보 수정
-			axios.put(`${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer/${detailCustomer.id}`
-				, customer)
+			axiosUtil({
+				url : `${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer/${detailCustomer.id}`,
+				method : 'put',
+				data : customer
+			})
 			.then((response) => {
 				console.log(response.data);
 				
@@ -104,6 +107,42 @@ const CustomerForm = () => {
 
 	};
 
+	/**
+	 * 삭제버튼 클릭 후 Confirm 시
+	 */
+	const handleConfirmDelete = () => {
+		
+		//거래처정보 삭제
+		axiosUtil({
+			url : `${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer/${detailCustomer.id}`,
+			method : 'delete',
+		})
+		.then((response) => {
+			console.log(response.data);
+			
+			//로딩바 감추기
+			dispatch(setDetailLoadingBar(false));
+
+			message.success('거래처정보가 삭제되었습니다.');
+
+			//목록 갱신하기
+			dispatch(setCustomers(
+				customers.filter(customer => customer.id != detailCustomer.id)
+			));
+
+			//팝업창 닫기
+			dispatch(setDetailModalVisible(false));
+
+		})
+		.catch((error) => {
+			alert('에러발생 : CustomerForm.js');
+			//로딩바 감추기
+			dispatch(setDetailLoadingBar(false));
+			console.log(error);
+		});
+
+	}
+
 
 	/**
 	 * 취소Alert창의 confirm 버튼
@@ -115,7 +154,7 @@ const CustomerForm = () => {
 
 	return (
 		<Modal 
-			form={form}
+			style={{ top: 10 }}
 			title="거래처정보"
 			visible={isDetailModalVisible} 
 			footer={null}
@@ -124,7 +163,8 @@ const CustomerForm = () => {
 		>
 			<Spin tip="Loading..." spinning={isDetailLoadingBar}>
 			<Form 
-				name="complex-form"
+				form={form}
+				name="customer-form"
 				onFinish={onFinish} 
 				{...layout}
 				validateMessages={validateMessages}
@@ -267,18 +307,26 @@ const CustomerForm = () => {
 				{/* <Form.Item style={{textAlign : 'right'}} > */}
 				<div style={{textAlign : 'right'}}>
 					<Space>
-						{/* <Popconfirm
-							title="등록을 취소하시겠습니까?"
-							onConfirm={handleConfirmCancel}
-							okText="Yes"
-							cancelText="No"
-						> */}
 							<Button onClick={handleConfirmCancel}>
-								Cancel
+								취소
 							</Button>
-						{/* </Popconfirm> */}
+						{
+							//신규가 아닌 경우만 삭제버튼 노출
+							detailCustomer.id &&
+							<Popconfirm
+								title="삭제하시겠습니까?"
+								onConfirm={handleConfirmDelete}
+								okText="Yes"
+								cancelText="No"
+							>
+								<Button type="primary">
+									삭제
+								</Button>
+							</Popconfirm>
+						}
+						
 						<Button type="primary" htmlType="submit">
-							Submit
+							저장
 						</Button>
 					</Space>
 				</div>
