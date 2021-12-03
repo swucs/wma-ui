@@ -8,6 +8,7 @@ import axiosUtil from "../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
 import CustomerForm from '../components/customer/CustomerForm';
 import { setCustomers, setListLoadingBar } from '../reducers/customerStore';
+import withHOCCheckAuth from '../hoc/withHOCCheckAuth';
 
 const customer = () => {
 
@@ -61,4 +62,4 @@ const customer = () => {
       );
 }
 
-export default customer;
+export default withHOCCheckAuth(customer);

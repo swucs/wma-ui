@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const instance = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
-    timeout: 1000,
+    timeout: 3000,
 });
 
 
@@ -11,8 +11,12 @@ instance.interceptors.request.use(
     function (config) {
         // 요청 바로 직전
         // axios 설정값에 대해 작성합니다.
+
+        const loginAdminToken = sessionStorage.getItem("loginAdmin");
+
         config.headers['Content-Type'] = 'application/json;charset=utf-8';
         // config.headers['Access-Control-Allow-Origin'] = '*';
+        config.headers.common["Authorization"] = `Bearer ${loginAdminToken}`;        
 
         return config;
     }, 
