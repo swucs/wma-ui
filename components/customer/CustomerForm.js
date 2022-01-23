@@ -45,7 +45,7 @@ const CustomerForm = () => {
 		if (!detailCustomer.id) {
 			//거래처정보 생성
 			axiosUtil({
-				url : `${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer`,
+				url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer`,
 				method : 'post',
 				data : customer
 			})
@@ -73,7 +73,7 @@ const CustomerForm = () => {
 		} else {
 			//거래처정보 수정
 			axiosUtil({
-				url : `${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer/${detailCustomer.id}`,
+				url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${detailCustomer.id}`,
 				method : 'put',
 				data : customer
 			})
@@ -114,7 +114,7 @@ const CustomerForm = () => {
 		
 		//거래처정보 삭제
 		axiosUtil({
-			url : `${process.env.NEXT_PUBLIC_API_URL}/customer/api/customer/${detailCustomer.id}`,
+			url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${detailCustomer.id}`,
 			method : 'delete',
 		})
 		.then((response) => {

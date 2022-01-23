@@ -25,18 +25,18 @@ const customer = () => {
         console.log('searchWord', searchWord);
 
 		axiosUtil({
-			url : `${process.env.NEXT_PUBLIC_API_URL}/customer/api/customers`,
+			url : `${process.env.NEXT_PUBLIC_API_URL}/api/customers`,
 			method : 'get',
 			params : {
-				page : 0,
-				pageSize : 1000,
+				// page : 0,
+				// pageSize : 1000,
 				name : searchWord.name
 			}
 		})
 		.then((response) => {
-			console.log('response.data : ' + response.data);
+			console.log('data' + JSON.stringify(response));
 			
-			dispatch(setCustomers(response.data._embedded.searchCustomerResponseList));
+			dispatch(setCustomers(response.data._embedded.customerDtoList));
 
 			//로딩바 감추기
 			dispatch(setListLoadingBar(false));
