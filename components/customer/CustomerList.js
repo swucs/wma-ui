@@ -105,12 +105,12 @@ const CustomerList = () => {
         },
         {
             title: '사용여부',
-            dataIndex: 'use',
-            key: 'address',
+            dataIndex: 'useYn',
+            key: 'useYn',
 			align: 'center',
-			render: use => (
+			render: useYn => (
 				<>
-					{use ? "사용" : "미사용"}
+					{useYn == 'Y' ? "사용" : "미사용"}
 				</>
 			)
         },

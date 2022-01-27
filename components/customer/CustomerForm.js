@@ -32,17 +32,18 @@ const CustomerForm = () => {
 	const customers = useSelector(state => state.customerStore.customers);							//거래처목록
 	const isDetailLoadingBar = useSelector(state => state.customerStore.isDetailLoadingBar);		//상세정보 로딩바
 
-
 	const [form] = Form.useForm();
 	
 	const onFinish = (customer) => {
 		// alert(JSON.stringify(customer));
-
+		//사용자가 상세정보를 state에 저장
+		dispatch(setDetailCustomer({...customer}));
 
 		//로딩바
 		dispatch(setDetailLoadingBar(true));
 
 		if (!detailCustomer.id) {
+
 			//거래처정보 생성
 			axiosUtil({
 				url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer`,
@@ -65,7 +66,12 @@ const CustomerForm = () => {
 
 			})
 			.catch((error) => {
-				alert('에러발생 : CustomerForm.js');
+				if (error.response?.data?.errors != null) {
+					displayErrorMessage(error.response.data.errors);
+				} else {
+					alert('에러발생 : CustomerForm.js');
+				}
+				
 				//로딩바 감추기
 				dispatch(setDetailLoadingBar(false));
 				console.log(error);
@@ -97,7 +103,12 @@ const CustomerForm = () => {
 
 			})
 			.catch((error) => {
-				alert('에러발생 : CustomerForm.js');
+				if (error.response?.data?.errors != null) {
+					displayErrorMessage(error.response.data.errors);
+				} else {
+					alert('에러발생 : CustomerForm.js');
+				}
+				
 				//로딩바 감추기
 				dispatch(setDetailLoadingBar(false));
 				console.log(error);
@@ -106,6 +117,21 @@ const CustomerForm = () => {
 		}
 
 	};
+	
+	/**
+	 * 저장처리 에러발생시 반환된 에러메시지 출력
+	 * @param errors 
+	 */
+	const displayErrorMessage = (errors) => {
+		for (const err of errors) {
+			console.log(err.field + " : " + err.defaultMessage);
+			form.setFields([{
+				name : err.field
+				, errors : [err.defaultMessage]
+			}]);
+		}
+	}
+
 
 	/**
 	 * 삭제버튼 클릭 후 Confirm 시
@@ -207,7 +233,7 @@ const CustomerForm = () => {
 				 	},
 					{
 						name: 'useYn',
-						value: detailCustomer.use ? 'Y' : (!detailCustomer.use ? 'N' : null),
+						value: detailCustomer.useYn,
 				 	},
 				]}
 			>
@@ -248,18 +274,12 @@ const CustomerForm = () => {
 				<Form.Item
 					name="businessConditions"
 					label="업태"
-					rules={[{
-						required: true,
-					}]}
 				>
 					<Input />
 				</Form.Item>
 				<Form.Item
 					name="typeOfBusiness"
 					label="업종"
-					rules={[{
-						required: true,
-					}]}
 				>
 					<Input />
 				</Form.Item>
@@ -284,9 +304,6 @@ const CustomerForm = () => {
 				<Form.Item
 					name="faxNumber"
 					label="Fax번호"
-					rules={[{
-						required: true,
-					}]}
 				>
 					<Input />
 				</Form.Item>
