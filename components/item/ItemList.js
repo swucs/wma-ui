@@ -101,7 +101,7 @@ const ItemList = () => {
 				columns={columns}
 				dataSource={newData}
 				loading={isListLoadingBar}
-				scroll={{ /*x: 1200, */y: scrollY}} 
+				scroll={{ x: 1280, y: scrollY}} 
 				pagination={false /*{position: ['none', 'bottomCenter']}*/}
 				
 			/>

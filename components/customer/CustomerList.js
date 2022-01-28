@@ -122,7 +122,7 @@ const CustomerList = () => {
                 columns={columns}
                 dataSource={newData}
                 loading={isListLoadingBar}
-                scroll={{ /*x: 1300, */y: scrollY}} 
+                scroll={{ x: 1280, y: scrollY}} 
                 pagination={false /*{position: ['none', 'bottomCenter']}*/}
                 
             />
