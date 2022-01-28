@@ -30,7 +30,7 @@ const Index = () => {
 
       //로그인
 			axiosUtil({
-				url : `${process.env.NEXT_PUBLIC_API_URL}/login`,
+				url : `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
 				method : 'post',
 				data : {
           id: loginForm.id,

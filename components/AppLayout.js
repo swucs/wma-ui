@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { Layout, Menu } from 'antd';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
@@ -8,7 +10,12 @@ const { Header, Content, Footer, Sider } = Layout;
 // React.useLayoutEffect = React.useEffect;
 
 
-const AppLayout = ({ children }) => {    
+const AppLayout = ({ children }) => {
+
+    const router = useRouter();
+    const selectedKeys = [router.pathname];
+
+    console.log('selectedKeys', router.pathname);
       
     return (
         <Layout>
@@ -23,15 +30,15 @@ const AppLayout = ({ children }) => {
                 // }}
             >
                 <div className="logo" style={{ margin: '38px 10px 0' }} />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                    <Menu.Item key="1" icon={<UserOutlined />}>
-                        거래처
+                <Menu theme="dark" mode="inline" selectedKeys={selectedKeys}>
+                    <Menu.Item key="/customer" icon={<UserOutlined />}>
+                        <Link href="/customer">거래처</Link>
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                        입출고
+                    <Menu.Item key="/item" icon={<VideoCameraOutlined />}>
+                        <Link href="/item">품목</Link>
                     </Menu.Item>
                     <Menu.Item key="3" icon={<UploadOutlined />}>
-                        품목
+                        입출고
                     </Menu.Item>
                     <Menu.Item key="4" icon={<UserOutlined />}>
                         단가

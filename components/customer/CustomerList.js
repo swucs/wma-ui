@@ -72,7 +72,7 @@ const CustomerList = () => {
 		{
             title: '전화번호',
             dataIndex: 'phoneNumber',
-            key: 'addphoneNumberess',
+            key: 'phoneNumber',
 			align: 'center',
         },
         {
@@ -117,14 +117,16 @@ const CustomerList = () => {
     ];
       
     return (
-        <Table 
-			columns={columns}
-			dataSource={newData}
-			loading={isListLoadingBar}
-			scroll={{ x: 1300, y: scrollY}} 
-			pagination={false /*{position: ['none', 'bottomCenter']}*/}
-			
-		/>
+        <div style={{height: scrollY + 65}}>
+            <Table
+                columns={columns}
+                dataSource={newData}
+                loading={isListLoadingBar}
+                scroll={{ /*x: 1300, */y: scrollY}} 
+                pagination={false /*{position: ['none', 'bottomCenter']}*/}
+                
+            />
+        </div>
     );
 };
 

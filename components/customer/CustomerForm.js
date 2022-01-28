@@ -324,9 +324,9 @@ const CustomerForm = () => {
 				{/* <Form.Item style={{textAlign : 'right'}} > */}
 				<div style={{textAlign : 'right'}}>
 					<Space>
-							<Button onClick={handleConfirmCancel}>
-								취소
-							</Button>
+						<Button onClick={handleConfirmCancel}>
+							취소
+						</Button>
 						{
 							//신규가 아닌 경우만 삭제버튼 노출
 							detailCustomer.id &&
