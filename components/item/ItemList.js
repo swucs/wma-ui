@@ -20,7 +20,7 @@ const ItemList = () => {
 	 */
 	const handleResize = () => {
 		console.log("handleResize: " + window.innerHeight);
-		setScrollY(window.innerHeight - 228);
+		setScrollY(window.innerHeight - 158);
 	}
 
 	/**
@@ -61,6 +61,13 @@ const ItemList = () => {
 	}, []);
 
     const columns = [
+		{
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id',
+			align: 'center',
+            width: 70,
+        },
         {
           title: '품목명',
           dataIndex: 'name',

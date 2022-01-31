@@ -37,8 +37,8 @@ const AppLayout = ({ children }) => {
                     <Menu.Item key="/item" icon={<VideoCameraOutlined />}>
                         <Link href="/item">품목</Link>
                     </Menu.Item>
-                    <Menu.Item key="3" icon={<UploadOutlined />}>
-                        입출고
+                    <Menu.Item key="/warehousing" icon={<UploadOutlined />}>
+                        <Link href="/warehousing">입출고</Link>
                     </Menu.Item>
                     <Menu.Item key="4" icon={<UserOutlined />}>
                         단가
@@ -52,7 +52,7 @@ const AppLayout = ({ children }) => {
                         {children}
                     </div>
                 </Content>
-                <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+                {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer> */}
             </Layout>
         </Layout>
       );

@@ -36,7 +36,11 @@ const customer = () => {
 		.then((response) => {
 			console.log('data' + JSON.stringify(response));
 			
-			dispatch(setCustomers(response.data._embedded.customerDtoList));
+			if (response.data._embedded) {
+				dispatch(setCustomers(response.data._embedded.customerDtoList));				
+			} else {
+				dispatch(setCustomers([]));
+			}
 
 			//로딩바 감추기
 			dispatch(setListLoadingBar(false));

@@ -36,7 +36,11 @@ const item = () => {
 		.then((response) => {
 			console.log('data' + JSON.stringify(response));
 			
-			dispatch(setItems(response.data._embedded.itemDtoList));
+			if (response.data._embedded) {
+				dispatch(setItems(response.data._embedded.itemDtoList));
+			} else {
+				dispatch(setItems([]));
+			}
 
 			//로딩바 감추기
 			dispatch(setListLoadingBar(false));
