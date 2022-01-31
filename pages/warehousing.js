@@ -1,0 +1,74 @@
+import React, { useState } from 'react';
+import { Space } from "antd";
+import AppLayout from "../components/AppLayout";
+import WarehousingSearchBox from "../components/warehousing/WarehousingSearchBox";
+import WarehousingList from "../components/warehousing/WarehousingList";
+import { useEffect } from 'react';
+import axiosUtil from "../utils/axiosUtil";
+import { useDispatch, useSelector } from 'react-redux';
+import WarehousingForm from '../components/warehousing/WarehousingForm';
+import { setWarehousings, setListLoadingBar } from '../reducers/warehousingStore';
+import withHOCCheckAuth from '../hoc/withHOCCheckAuth';
+import moment from 'moment';
+
+const warehousing = () => {
+
+	const dispatch = useDispatch();
+
+	//Redux State로 부터 검색어 모니터링
+	const searchWord = useSelector(state => state.warehousingStore.searchWord);
+	
+
+	useEffect(() => {
+		//로딩바 출력
+		dispatch(setListLoadingBar(true));
+        console.log('searchWord', searchWord);
+		
+
+		axiosUtil({
+			url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousings`,
+			method : 'get',
+			params : {
+				// page : 0,
+				// pageSize : 1000,
+				baseDateFrom : searchWord.baseDateFrom.format("YYYY-MM-DD"),
+				baseDateTo : searchWord.baseDateTo.format("YYYY-MM-DD"),
+				customerName: searchWord.customerName,
+				itemName: searchWord.itemName,
+				warehousingTypeText: searchWord.warehousingTypeText,
+			}
+		})
+		.then((response) => {
+			console.log('data' + JSON.stringify(response.data));
+			
+			if (response.data._embedded) {
+				dispatch(setWarehousings(response.data._embedded.warehousingDtoList));
+			} else {
+				dispatch(setWarehousings([]));
+			}
+
+			//로딩바 감추기
+			dispatch(setListLoadingBar(false));
+		})
+		.catch((error) => {
+			alert('에러발생 : screener.js');
+			console.log(error);
+		});
+
+    }, [ searchWord ]);
+
+    
+      
+    return (
+        <AppLayout>
+            <Space direction="vertical" style={{width :'100%'}}>
+                <WarehousingSearchBox />
+                <WarehousingList />
+				<WarehousingForm />
+            </Space>
+			
+        </AppLayout>
+      );
+}
+
+export default withHOCCheckAuth(warehousing);
