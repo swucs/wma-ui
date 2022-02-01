@@ -73,7 +73,7 @@ const ItemList = () => {
           dataIndex: 'name',
           key: 'name',
           align: 'left',
-		  width: 350,
+		//   width: 350,
           render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
         },
 		{
@@ -81,24 +81,27 @@ const ItemList = () => {
             dataIndex: 'unitWeight',
             key: 'unitWeight',
 			align: 'center',
+			width: 120,
         },
         {
           title: '단위명',
           dataIndex: 'unitName',
           key: 'unitName',
           align: 'center',
+		  width: 100,
         },
         {
             title: '최초등록일자',
             dataIndex: 'registeredDate',
             key: 'registeredDate',
             align: 'center',
+			width: 180,
         },
         {
             title: '비고',
             dataIndex: 'remarks',
             key: 'remarks',
-			width: 210,
+			width: 200,
         },
     ];
       
@@ -108,7 +111,7 @@ const ItemList = () => {
 				columns={columns}
 				dataSource={newData}
 				loading={isListLoadingBar}
-				scroll={{ x: 1280, y: scrollY}} 
+				scroll={{ x: 850, y: scrollY}} 
 				pagination={false /*{position: ['none', 'bottomCenter']}*/}
 				
 			/>

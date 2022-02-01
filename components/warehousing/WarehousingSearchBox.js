@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Form, Input, Select, Space, DatePicker } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import { queryWarehousings, setDetailWarehousing, setDetailModalVisible } from '../../reducers/warehousingStore';
+import moment from 'moment';
 
 
 const { Search } = Input;
@@ -23,7 +24,7 @@ const WarehousingSearchBox = () => {
 	//신규버튼
 	const handleClick = () => {
 		//비어있는 상세정보 세팅
-		dispatch(setDetailWarehousing({use : true}));
+		dispatch(setDetailWarehousing({baseDate : moment(new Date()).format("YYYY-MM-DD")}));
 
 		//상세팝업 띄우기
 		dispatch(setDetailModalVisible(true));
@@ -36,7 +37,7 @@ const WarehousingSearchBox = () => {
 		dispatch(queryWarehousings({
 			baseDateFrom : searchFormData.baseDateFrom,
 			baseDateTo : searchFormData.baseDateTo,
-			warehousingTypeText: searchFormData.warehousingTypeText,
+			warehousingTypeValue: searchFormData.warehousingTypeValue,
 			customerName: searchFormData.customerName,
 			itemName: searchFormData.itemName,
 		}));
@@ -63,8 +64,8 @@ const WarehousingSearchBox = () => {
 					value: searchWord.baseDateTo,
 				},
 				{
-					name: 'warehousingTypeText',
-					value: searchWord.warehousingTypeText,
+					name: 'warehousingTypeValue',
+					value: searchWord.warehousingTypeValue,
 				},
 				{
 					name: 'customerName',
@@ -78,14 +79,14 @@ const WarehousingSearchBox = () => {
 		>
 			<Space wrap>
 				
-				<Form.Item name="baseDateFrom" style={{margin: 0}}>
+				<Form.Item name="baseDateFrom" style={{margin: 0, display: 'inline-block'}}>
 					<DatePicker size="large" style={{width:135}} />
 				</Form.Item>
-				<Form.Item name="baseDateTo" style={{margin: 0}}>
+				<Form.Item name="baseDateTo" style={{margin: 0, display: 'inline-block'}}>
 					<DatePicker size="large" style={{width:135}} />
 				</Form.Item>
 
-				<Form.Item name="warehousingTypeText" style={{margin: 0}}>
+				<Form.Item name="warehousingTypeValue" style={{margin: 0, display: 'inline-block'}}>
 					<Select 
 						onChange={handleChange}
 						style={{width:80}}
@@ -96,8 +97,8 @@ const WarehousingSearchBox = () => {
 						<Option value="OUTGOING">출고</Option>
 					</Select>
 				</Form.Item>
-			
-				<Form.Item name="customerName" style={{margin: 0}}>
+
+				<Form.Item name="customerName" style={{margin: 0, display: 'inline-block'}}>
 					<Input
 						placeholder="고객명"
 						style={{width: 120}}
@@ -105,7 +106,7 @@ const WarehousingSearchBox = () => {
 					/>
 				</Form.Item>
 
-				<Form.Item name="itemName" style={{margin: 0}}>
+				<Form.Item name="itemName" style={{margin: 0, display: 'inline-block'}}>
 					<Input
 						placeholder="품목명"
 						style={{width: 120}}
@@ -113,9 +114,7 @@ const WarehousingSearchBox = () => {
 					/>
 				</Form.Item>
 
-				
-
-				<Form.Item style={{margin: 0}}>
+				<Form.Item style={{margin: 0, display: 'inline-block'}}>
 					<Button
 						type="primary"
 						htmlType="submit"
@@ -126,12 +125,13 @@ const WarehousingSearchBox = () => {
 					</Button>
 				</Form.Item>
 
-				<Form.Item style={{margin: 0}}>
+				<Form.Item style={{margin: 0, display: 'inline-block'}}>
 					<Button 
 						icon={<PlusOutlined />}
 						size="large"
 						onClick={handleClick} />
 				</Form.Item>
+
 			</Space>
         </Form>
 

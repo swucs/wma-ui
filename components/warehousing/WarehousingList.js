@@ -28,6 +28,7 @@ const WarehousingList = () => {
 	 * 업체명 클릭
 	 */
 	const handlerClickName = (warehousing) => {
+		console.log('warehousing', warehousing);
 		//상세정보 세팅
 		dispatch(setDetailWarehousing(warehousing));
 		//상세팝업창 띄우기
@@ -72,7 +73,7 @@ const WarehousingList = () => {
         {
 			title: '거래처명',
 			dataIndex: 'customerName',
-			key: 'name',
+			key: 'customerName',
 			align: 'left',
 			render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
         },
@@ -105,7 +106,7 @@ const WarehousingList = () => {
 				columns={columns}
 				dataSource={newData}
 				loading={isListLoadingBar}
-				scroll={{ x: 1280, y: scrollY}} 
+				scroll={{ x: 740, y: scrollY}} 
 				pagination={false /*{position: ['none', 'bottomCenter']}*/}
 			/>
 		</div>

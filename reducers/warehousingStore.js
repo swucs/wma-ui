@@ -12,13 +12,16 @@ const initialState = {
         baseDateTo: moment(now),            //moment값
         customerName: null,
         itemName: null,
-        warehousingTypeText: null,
+        warehousingTypeValue: null,
     }, 
-	isDetailModalVisible: false,	//상세 Modal창 출력여부
+	isDetailModalVisible: false,	    //상세 Modal창 출력여부
+    isDetailItemModalVisible: false,    //입출고내역 Modal창 출력여부
 	warehousings: [],					//거래처목록
 	detailWarehousing: {},				//거래처상세데이터
-	isListLoadingBar: false,		//목록 로딩바
-	isDetailLoadingBar: false,		//상세 로딩바
+    warehousingDetails: [],             //거래처내역목록
+    warehousingDetailItem: {},          //거래처내역상세데이터
+	isListLoadingBar: false,		    //목록 로딩바
+	isDetailLoadingBar: false,		    //상세 로딩바
 };
 
 
@@ -34,6 +37,22 @@ export const queryWarehousings = (data) => {
 export const setWarehousings = (data) => {
     return {
         type: 'SET_WAREHOUSINGS',
+        data
+    };
+};
+
+//입출력 내역 목록 출력
+export const setWarehousingDetails = (data) => {
+    return {
+        type: 'SET_WAREHOUSING_DETAILS',
+        data
+    };
+};
+
+//입출력 내역 상세
+export const setWarehousingDetailItem = (data) => {
+    return {
+        type: 'SET_WAREHOUSING_DETAIL_ITEM',
         data
     };
 };
@@ -70,6 +89,14 @@ export const setDetailLoadingBar = (data) => {
     };
 };
 
+//상세 MODAL 출력여부
+export const setDetailItemModalVisible = (data) => {
+    return {
+        type: 'SET_DETAIL_ITEM_MODAL_VISIBLE',
+        data
+    };
+};
+
 
 export const warehousingStore = (state = initialState, action) => {
     switch (action.type) {
@@ -81,7 +108,7 @@ export const warehousingStore = (state = initialState, action) => {
                     baseDateTo: action.data.baseDateTo,
                     customerName: action.data.customerName,
                     itemName: action.data.itemName,
-                    warehousingTypeText: action.data.warehousingTypeText,
+                    warehousingTypeValue: action.data.warehousingTypeValue,
                 }
             }
         }
@@ -89,6 +116,18 @@ export const warehousingStore = (state = initialState, action) => {
             return {
                 ...state,
                 warehousings: [...action.data],
+            }
+        }
+        case 'SET_WAREHOUSING_DETAILS': {
+            return {
+                ...state,
+                warehousingDetails: [...action.data],
+            }
+        }
+        case 'SET_WAREHOUSING_DETAIL_ITEM': {
+            return {
+                ...state,
+                warehousingDetailItem: {...action.data},
             }
         }
 		case 'SET_LIST_LOADING_BAR': {
@@ -115,6 +154,12 @@ export const warehousingStore = (state = initialState, action) => {
                 isDetailLoadingBar: action.data,
             }
 		}
+        case 'SET_DETAIL_ITEM_MODAL_VISIBLE': {
+            return {
+                ...state,
+                isDetailItemModalVisible: action.data,
+            }
+        }
         default: {
             return {
                 ...state,

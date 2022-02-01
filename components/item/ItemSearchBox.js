@@ -18,7 +18,7 @@ const ItemSearchBox = () => {
 	//신규버튼
 	const handleClick = () => {
 		//비어있는 상세정보 세팅
-		dispatch(setDetailItem({use : true}));
+		dispatch(setDetailItem({}));
 
 		//상세팝업 띄우기
 		dispatch(setDetailModalVisible(true));

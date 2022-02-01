@@ -1,26 +1,26 @@
-import React, { useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin, Popconfirm, InputNumber } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Modal, Form, Input, DatePicker, Select, Button, Divider, Space, message, Spin, Popconfirm, InputNumber } from 'antd';
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
-import { setWarehousings, setDetailWarehousing, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/warehousingStore';
+import { setWarehousings, setWarehousingDetails, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/warehousingStore';
+import WarehousingDetailList from "./WarehousingDetailList";
+import moment from 'moment';
+
 
 const { Option } = Select;
 
 
 const layout = {
 	labelCol: {
-	  span: 6,
-	},
-	wrapperCol: {
-	  span: 16,
+	  span: 4,
 	},
 };
 
   /* eslint-disable no-template-curly-in-string */
   
-  const validateMessages = {
+const validateMessages = {
 	required: '${label}을(를) 입력하세요.'
-  };
+};
   /* eslint-enable no-template-curly-in-string */
 
 const WarehousingForm = () => {
@@ -32,8 +32,61 @@ const WarehousingForm = () => {
 	const warehousings = useSelector(state => state.warehousingStore.warehousings);							//입출고목록
 	const isDetailLoadingBar = useSelector(state => state.warehousingStore.isDetailLoadingBar);		//상세정보 로딩바
 
+	const [customerCodes, setCustomerCodes] = useState([]);
+	const [itemCodes, setItemCodes] = useState([]);
+
 	const [form] = Form.useForm();
+
+	/**
+	 * 거래처목록(Selectbox용)
+	 */
+	useEffect(() => {
+		axiosUtil({
+			url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer/validCodes`,
+			method : 'get',
+		})
+		.then((response) => {
+			console.log('data' + JSON.stringify(response.data));
+			if (response.data) {
+				setCustomerCodes(response.data);
+			} else {
+				setCustomerCodes([]);
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+	}, []);
+
+	/**
+	 * 입출고 상세내역 목록
+	 */
+	useEffect(() => {
+		if (detailWarehousing.id) {
+			axiosUtil({
+				url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${detailWarehousing.id}/details`,
+				method : 'get',
+			})
+			.then((response) => {
+				console.log('data' + JSON.stringify(response.data));
+				if (response.data) {
+					dispatch(setWarehousingDetails(response.data._embedded.warehousingDetailDtoList));
+				} else {
+					dispatch(setWarehousingDetails([]));
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		} else {
+			dispatch(setWarehousingDetails([]));
+		}
+	}, [detailWarehousing]);
 	
+	/**
+	 * 저장
+	 * @param {*} warehousing 
+	 */
 	const onFinish = (warehousing) => {
 
 		// alert(JSON.stringify(warehousing));
@@ -193,6 +246,7 @@ const WarehousingForm = () => {
 				name="warehousing-form"
 				onFinish={onFinish} 
 				{...layout}
+				// layout="horizontal"
 				validateMessages={validateMessages}
 				fields={[
 					{
@@ -200,24 +254,28 @@ const WarehousingForm = () => {
 						value: detailWarehousing.id,
 					},
 					{
+						name: 'baseDate',
+						value: moment(detailWarehousing.baseDate, 'YYYY-MM-DD'),
+				 	},
+					{
+						name: 'customerId',
+						value: detailWarehousing.customerId,
+				 	},
+					{
+						name: 'militarySupplyYn',
+						value: detailWarehousing.militarySupplyYn,
+				 	},
+					{
 						name: 'name',
 						value: detailWarehousing.name,
 				 	},
 					{
-						name: 'unitWeight',
-						value: detailWarehousing.unitWeight,
+						name: 'warehousingTypeValue',
+						value: detailWarehousing.warehousingTypeValue,
 				 	},
 					{
-						name: 'unitName',
-						value: detailWarehousing.unitName,
-				 	},
-					{
-						name: 'remarks',
-						value: detailWarehousing.remarks,
-				 	},
-					 {
-						name: 'registeredDate',
-						value: detailWarehousing.registeredDate,
+						name: 'quickFrozenYn',
+						value: detailWarehousing.quickFrozenYn,
 				 	},
 				]}
 			>
@@ -228,70 +286,100 @@ const WarehousingForm = () => {
 				>
 					<Input type="hidden" />
 				</Form.Item>
+
+				<Form.Item
+					name="baseDate"
+					label="기준일자"
+					rules={[{
+						required: true,
+					}]}
+				>
+					<DatePicker />
+				</Form.Item>
+
+				<Form.Item
+					name="customerId"
+					label="거래처"
+					rules={[{
+						required: true,
+					}]}
+				>
+					<Select>
+						{customerCodes.map(code => (
+							<Option key={code.id} value={code.id}>{code.name}</Option>
+						))}
+					</Select>
+				</Form.Item>
+
+				{
+				//신규인 경우만 삭제버튼 노출
+				!detailWarehousing.id &&
+				<Form.Item
+					name="militarySupplyYn"
+					label="군납여부"
+					rules={[{
+						required: true,
+					}]}
+				>
+					<Select defaultValue="N">
+						<Option value="N">N</Option>
+						<Option value="Y">Y</Option>
+					</Select>
+				</Form.Item>
+				}
+
 				<Form.Item
 					name="name"
-					label="입출고명"
-					rules={[{
-							required: true,
-					}]}
-				>
-					<Input />
-				</Form.Item>
-				<Form.Item
-					name="unitWeight"
-					label="단위무게"
-					rules={[{
-							required: true,
-					}]}
-				>
-					<InputNumber 
-						style={{ width: '100%'}} 
-						controls={false}
-						precision={1}
-					/>
-				</Form.Item>
-				<Form.Item
-					name="unitName"
-					label="단위명"
+					label="입고인"
 					rules={[{
 						required: true,
 					}]}
 				>
 					<Input />
 				</Form.Item>
-				<Form.Item
-					name="remarks"
-					label="비고"
-				>
-					<Input />
-				</Form.Item>
-				{
-					//신규가 아닌 경우만 삭제버튼 노출
-					detailWarehousing.id &&
-					<Form.Item
-						name="registeredDate"
-						label="등록일시"
-					>
-						{/* <Input style={{color: 'black'}} disabled={true} bordered={false} /> */}
-						{detailWarehousing.registeredDate}
-					</Form.Item>
-				}
 
-				<Divider />
-				{/* <Form.Item style={{textAlign : 'right'}} > */}
-				<div style={{textAlign : 'right'}}>
-					<Space>
-						<Button onClick={handleConfirmCancel}>
-							취소
-						</Button>
-						<Button type="primary" htmlType="submit">
-							저장
-						</Button>
-					</Space>
-				</div>
-				{/* </Form.Item> */}
-				
+				<Form.Item
+					name="warehousingTypeValue"
+					label="입출고"
+					rules={[{
+						required: true,
+					}]}
+				>
+					<Select defaultValue="INCOMING">
+						<Option value="INCOMING">입고</Option>
+						<Option value="OUTGOING">출고</Option>
+					</Select>
+				</Form.Item>
+
+				<Form.Item
+					name="quickFrozenYn"
+					label="동결입고"
+					rules={[{
+						required: true,
+					}]}
+				>
+					<Select defaultValue="N">
+						<Option value="N">비동결</Option>
+						<Option value="Y">동결</Option>
+					</Select>
+				</Form.Item>				
 			</Form>
+
+			{/* 입출고 내역 */}
+			<WarehousingDetailList />
+			{/* 입출고 내역 */}
+
+			<div style={{textAlign : 'right'}}>
+				<Space>
+					<Button onClick={handleConfirmCancel}>
+						취소
+					</Button>
+					<Button type="primary" htmlType="submit">
+						저장
+					</Button>
+				</Space>
+			</div>
+
 			</Spin>
 		</Modal>
 		

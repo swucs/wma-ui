@@ -16,8 +16,7 @@ const warehousing = () => {
 	const dispatch = useDispatch();
 
 	//Redux State로 부터 검색어 모니터링
-	const searchWord = useSelector(state => state.warehousingStore.searchWord);
-	
+	const searchWord = useSelector(state => state.warehousingStore.searchWord);	
 
 	useEffect(() => {
 		//로딩바 출력
@@ -35,7 +34,7 @@ const warehousing = () => {
 				baseDateTo : searchWord.baseDateTo.format("YYYY-MM-DD"),
 				customerName: searchWord.customerName,
 				itemName: searchWord.itemName,
-				warehousingTypeText: searchWord.warehousingTypeText,
+				warehousingTypeValue: searchWord.warehousingTypeValue,
 			}
 		})
 		.then((response) => {
