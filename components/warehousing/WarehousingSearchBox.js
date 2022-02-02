@@ -2,8 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Form, Input, Select, Space, DatePicker } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
-import { queryWarehousings, setDetailWarehousing, setDetailModalVisible } from '../../reducers/warehousingStore';
+import { queryWarehousings, setWarehousingItem, setDetailModalVisible } from '../../reducers/warehousingStore';
 import moment from 'moment';
+import { DATE_FORMAT_YYYYMMDD } from  "../../utils/formatUtil";
 
 
 const { Search } = Input;
@@ -24,7 +25,7 @@ const WarehousingSearchBox = () => {
 	//신규버튼
 	const handleClick = () => {
 		//비어있는 상세정보 세팅
-		dispatch(setDetailWarehousing({baseDate : moment(new Date()).format("YYYY-MM-DD")}));
+		dispatch(setWarehousingItem({baseDate : moment(new Date()).format(DATE_FORMAT_YYYYMMDD)}));
 
 		//상세팝업 띄우기
 		dispatch(setDetailModalVisible(true));

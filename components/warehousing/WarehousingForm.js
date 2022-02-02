@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, DatePicker, Select, Button, Divider, Space, message, Spin, Popconfirm, InputNumber } from 'antd';
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
-import { setWarehousings, setWarehousingDetails, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/warehousingStore';
+import { setWarehousings, setWarehousingItem, setWarehousingDetails, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/warehousingStore';
 import WarehousingDetailList from "./WarehousingDetailList";
 import moment from 'moment';
+import { DATE_FORMAT_YYYYMMDD } from  "../../utils/formatUtil";
 
 
 const { Option } = Select;
@@ -28,25 +29,30 @@ const WarehousingForm = () => {
 
 	const dispatch = useDispatch();
 	const isDetailModalVisible = useSelector(state => state.warehousingStore.isDetailModalVisible);	//상세팝업출력여부
-	const detailWarehousing = useSelector(state => state.warehousingStore.detailWarehousing);				//상세입출고정보
 	const warehousings = useSelector(state => state.warehousingStore.warehousings);							//입출고목록
+	const warehousingItem = useSelector(state => state.warehousingStore.warehousingItem);				//상세입출고정보
+	const warehousingDetails = useSelector(state => state.warehousingStore.warehousingDetails);				//입출고내역목록
 	const isDetailLoadingBar = useSelector(state => state.warehousingStore.isDetailLoadingBar);		//상세정보 로딩바
 
+	//기준일자, 거래처 등 편집가능여부
+	const isEditable = warehousingItem.id ? false : true;
+
+	//거래처목록
 	const [customerCodes, setCustomerCodes] = useState([]);
-	const [itemCodes, setItemCodes] = useState([]);
 
 	const [form] = Form.useForm();
 
 	/**
-	 * 거래처목록(Selectbox용)
+	 * 코드정보(Selectbox용)
 	 */
 	useEffect(() => {
+
+		//거래처목록
 		axiosUtil({
 			url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer/validCodes`,
 			method : 'get',
 		})
 		.then((response) => {
-			console.log('data' + JSON.stringify(response.data));
 			if (response.data) {
 				setCustomerCodes(response.data);
 			} else {
@@ -62,9 +68,9 @@ const WarehousingForm = () => {
 	 * 입출고 상세내역 목록
 	 */
 	useEffect(() => {
-		if (detailWarehousing.id) {
+		if (warehousingItem.id) {
 			axiosUtil({
-				url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${detailWarehousing.id}/details`,
+				url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${warehousingItem.id}/details`,
 				method : 'get',
 			})
 			.then((response) => {
@@ -81,22 +87,23 @@ const WarehousingForm = () => {
 		} else {
 			dispatch(setWarehousingDetails([]));
 		}
-	}, [detailWarehousing]);
+	}, [warehousingItem]);
 	
 	/**
 	 * 저장
 	 * @param {*} warehousing 
 	 */
 	const onFinish = (warehousing) => {
-
-		// alert(JSON.stringify(warehousing));
+		alert(JSON.stringify(warehousing));
+		alert(JSON.stringify(warehousingDetails));
+		// return;
 		//사용자가 상세정보를 state에 저장
-		dispatch(setDetailWarehousing({...warehousing}));
+		dispatch(setWarehousingItem({...warehousing}));
 
-		//로딩바
+		// //로딩바
 		dispatch(setDetailLoadingBar(true));
 
-		if (!detailWarehousing.id) {
+		if (!warehousingItem.id) {
 
 			//입출고정보 생성
 			axiosUtil({
@@ -133,9 +140,14 @@ const WarehousingForm = () => {
 		} else {
 			//입출고정보 수정
 			axiosUtil({
-				url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${detailWarehousing.id}`,
+				url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${warehousingItem.id}`,
 				method : 'put',
-				data : warehousing
+				data : { 
+					...warehousing
+					, warehousingDetails : [
+						...warehousingDetails
+					]
+				}
 			})
 			.then((response) => {
 				console.log(response.data);
@@ -148,12 +160,12 @@ const WarehousingForm = () => {
 				//목록 갱신하기
 				dispatch(setWarehousings(
 					warehousings.map(warehousing => {
-						return warehousing.id === detailWarehousing.id ? {...response.data} : warehousing
+						return warehousing.id === warehousingItem.id ? {...response.data, key: warehousingItem.id} : warehousing
 					})
 				));
 
 				//상세정보 갱신
-				dispatch(setDetailWarehousing({...response.data}));
+				// dispatch(setWarehousingItem({...response.data}));
 
 			})
 			.catch((error) => {
@@ -194,7 +206,7 @@ const WarehousingForm = () => {
 		
 		//입출고정보 삭제
 		axiosUtil({
-			url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${detailWarehousing.id}`,
+			url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${warehousingItem.id}`,
 			method : 'delete',
 		})
 		.then((response) => {
@@ -207,7 +219,7 @@ const WarehousingForm = () => {
 
 			//목록 갱신하기
 			dispatch(setWarehousings(
-				warehousings.filter(warehousing => warehousing.id != detailWarehousing.id)
+				warehousings.filter(warehousing => warehousing.id != warehousingItem.id)
 			));
 
 			//팝업창 닫기
@@ -246,36 +258,35 @@ const WarehousingForm = () => {
 				name="warehousing-form"
 				onFinish={onFinish} 
 				{...layout}
-				// layout="horizontal"
 				validateMessages={validateMessages}
 				fields={[
 					{
 						name: 'id',
-						value: detailWarehousing.id,
+						value: warehousingItem.id,
 					},
 					{
 						name: 'baseDate',
-						value: moment(detailWarehousing.baseDate, 'YYYY-MM-DD'),
+						value: moment(warehousingItem.baseDate, DATE_FORMAT_YYYYMMDD),
 				 	},
 					{
 						name: 'customerId',
-						value: detailWarehousing.customerId,
+						value: warehousingItem.customerId,
 				 	},
 					{
 						name: 'militarySupplyYn',
-						value: detailWarehousing.militarySupplyYn,
+						value: warehousingItem.militarySupplyYn,
 				 	},
 					{
 						name: 'name',
-						value: detailWarehousing.name,
+						value: warehousingItem.name,
 				 	},
 					{
 						name: 'warehousingTypeValue',
-						value: detailWarehousing.warehousingTypeValue,
+						value: warehousingItem.warehousingTypeValue,
 				 	},
 					{
 						name: 'quickFrozenYn',
-						value: detailWarehousing.quickFrozenYn,
+						value: warehousingItem.quickFrozenYn,
 				 	},
 				]}
 			>
@@ -294,7 +305,8 @@ const WarehousingForm = () => {
 						required: true,
 					}]}
 				>
-					<DatePicker />
+					<DatePicker disabled={true}
+					/>
 				</Form.Item>
 
 				<Form.Item
@@ -304,7 +316,7 @@ const WarehousingForm = () => {
 						required: true,
 					}]}
 				>
-					<Select>
+					<Select disabled={true}>
 						{customerCodes.map(code => (
 							<Option key={code.id} value={code.id}>{code.name}</Option>
 						))}
@@ -313,7 +325,7 @@ const WarehousingForm = () => {
 
 				{
 				//신규인 경우만 삭제버튼 노출
-				!detailWarehousing.id &&
+				!warehousingItem.id &&
 				<Form.Item
 					name="militarySupplyYn"
 					label="군납여부"
@@ -321,7 +333,7 @@ const WarehousingForm = () => {
 						required: true,
 					}]}
 				>
-					<Select defaultValue="N">
+					<Select>
 						<Option value="N">N</Option>
 						<Option value="Y">Y</Option>
 					</Select>
@@ -345,7 +357,7 @@ const WarehousingForm = () => {
 						required: true,
 					}]}
 				>
-					<Select defaultValue="INCOMING">
+					<Select>
 						<Option value="INCOMING">입고</Option>
 						<Option value="OUTGOING">출고</Option>
 					</Select>
@@ -358,28 +370,29 @@ const WarehousingForm = () => {
 						required: true,
 					}]}
 				>
-					<Select defaultValue="N">
+					<Select>
 						<Option value="N">비동결</Option>
 						<Option value="Y">동결</Option>
 					</Select>
 				</Form.Item>				
-			</Form>
+			
 
-			{/* 입출고 내역 */}
-			<WarehousingDetailList />
-			{/* 입출고 내역 */}
+				{/* 입출고 내역 */}
+				<WarehousingDetailList />
+				{/* 입출고 내역 */}
 
-			<div style={{textAlign : 'right'}}>
-				<Space>
-					<Button onClick={handleConfirmCancel}>
-						취소
-					</Button>
-					<Button type="primary" htmlType="submit">
-						저장
-					</Button>
-				</Space>
-			</div>
+				<div style={{textAlign : 'right'}}>
+					<Space>
+						<Button onClick={handleConfirmCancel}>
+							취소
+						</Button>
+						<Button type="primary" htmlType="submit">
+							저장
+						</Button>
+					</Space>
+				</div>
 
+				</Form>
 			</Spin>
 		</Modal>
 		

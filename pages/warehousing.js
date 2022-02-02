@@ -10,6 +10,7 @@ import WarehousingForm from '../components/warehousing/WarehousingForm';
 import { setWarehousings, setListLoadingBar } from '../reducers/warehousingStore';
 import withHOCCheckAuth from '../hoc/withHOCCheckAuth';
 import moment from 'moment';
+import { DATE_FORMAT_YYYYMMDD } from  "../utils/formatUtil";
 
 const warehousing = () => {
 
@@ -30,8 +31,8 @@ const warehousing = () => {
 			params : {
 				// page : 0,
 				// pageSize : 1000,
-				baseDateFrom : searchWord.baseDateFrom.format("YYYY-MM-DD"),
-				baseDateTo : searchWord.baseDateTo.format("YYYY-MM-DD"),
+				baseDateFrom : searchWord.baseDateFrom.format(DATE_FORMAT_YYYYMMDD),
+				baseDateTo : searchWord.baseDateTo.format(DATE_FORMAT_YYYYMMDD),
 				customerName: searchWord.customerName,
 				itemName: searchWord.itemName,
 				warehousingTypeValue: searchWord.warehousingTypeValue,

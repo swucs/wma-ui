@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDetailWarehousing, setDetailModalVisible } from '../../reducers/warehousingStore';
+import { setWarehousingItem, setDetailModalVisible } from '../../reducers/warehousingStore';
 
 const WarehousingList = () => {
 
@@ -30,7 +30,7 @@ const WarehousingList = () => {
 	const handlerClickName = (warehousing) => {
 		console.log('warehousing', warehousing);
 		//상세정보 세팅
-		dispatch(setDetailWarehousing(warehousing));
+		dispatch(setWarehousingItem(warehousing));
 		//상세팝업창 띄우기
 		dispatch(setDetailModalVisible(true));
 	}

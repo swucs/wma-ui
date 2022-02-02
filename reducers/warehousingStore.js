@@ -17,7 +17,7 @@ const initialState = {
 	isDetailModalVisible: false,	    //상세 Modal창 출력여부
     isDetailItemModalVisible: false,    //입출고내역 Modal창 출력여부
 	warehousings: [],					//거래처목록
-	detailWarehousing: {},				//거래처상세데이터
+	warehousingItem: {},				//거래처상세데이터
     warehousingDetails: [],             //거래처내역목록
     warehousingDetailItem: {},          //거래처내역상세데이터
 	isListLoadingBar: false,		    //목록 로딩바
@@ -37,6 +37,14 @@ export const queryWarehousings = (data) => {
 export const setWarehousings = (data) => {
     return {
         type: 'SET_WAREHOUSINGS',
+        data
+    };
+};
+
+//상세 거래처정보 세팅
+export const setWarehousingItem = (data) => {
+    return {
+        type: 'SET_WAREHOUSING_ITEM',
         data
     };
 };
@@ -69,14 +77,6 @@ export const setListLoadingBar = (data) => {
 export const setDetailModalVisible = (data) => {
     return {
         type: 'SET_DETAIL_MODAL_VISIBLE',
-        data
-    };
-};
-
-//상세 거래처정보 세팅
-export const setDetailWarehousing = (data) => {
-    return {
-        type: 'SET_DETAIL_WAREHOUSING',
         data
     };
 };
@@ -142,10 +142,10 @@ export const warehousingStore = (state = initialState, action) => {
                 isDetailModalVisible: action.data,
             }
         }
-		case 'SET_DETAIL_WAREHOUSING': {
+		case 'SET_WAREHOUSING_ITEM': {
             return {
                 ...state,
-                detailWarehousing: {...action.data},
+                warehousingItem: {...action.data},
             }
         }
 		case 'SET_DETAIL_LOADING_BAR': {

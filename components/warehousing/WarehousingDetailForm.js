@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin, Popconfirm, InputNumber } from 'antd';
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
-import { setWarehousingDetails } from '../../reducers/warehousingStore';
+import { setDetailItemModalVisible } from '../../reducers/warehousingStore';
 
 
 const { Option } = Select;
@@ -27,12 +27,37 @@ const WarehousingDetailForm = () => {
 	const dispatch = useDispatch();
 
 	//Redux State로 부터 거래처목록 모니터링
+	const warehousingItem = useSelector((state) => state.warehousingStore.warehousingItem);
 	const warehousingDetailItem = useSelector((state) => state.warehousingStore.warehousingDetailItem);
 	const isDetailItemModalVisible = useSelector(state => state.warehousingStore.isDetailItemModalVisible);	//입출고내역 팝업출력여부
 
+	//상태정보
+	const [itemCodes, setItemCodes] = useState([]);
+
+	/**
+	 * 코드정보(Selectbox용)
+	 */
+	 useEffect(() => {
+		//품목목록
+		axiosUtil({
+			url : `${process.env.NEXT_PUBLIC_API_URL}/api/item/customer/${warehousingItem.customerId}/codes`,
+			method : 'get',
+		})
+		.then((response) => {
+			if (response.data) {
+				setItemCodes(response.data);
+			} else {
+				setItemCodes([]);
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+	}, []);
+
 
 	const handleConfirmCancel = () => {
-
+		dispatch(setDetailItemModalVisible(false));
 	};
 
 	return (
@@ -41,7 +66,7 @@ const WarehousingDetailForm = () => {
 			title="입출고정보"
 			visible={isDetailItemModalVisible} 
 			footer={null}
-			// onCancel={handleConfirmCancel}
+			onCancel={handleConfirmCancel}
 			destroyOnClose={true}	//이 옵션이 있어야 모달이 닫힐 때 객체들이 destory되는듯
 		>
 			<Form 
@@ -89,10 +114,15 @@ const WarehousingDetailForm = () => {
 						required: true,
 					}]}
 				>
-					<Select>
-						{/* {customerCodes.map(code => (
+					<Select
+						showSearch
+						filterOption={(input, option) =>
+							option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+						}
+					>
+						{itemCodes.map(code => (
 							<Option key={code.id} value={code.id}>{code.name}</Option>
-						))} */}
+						))}
 					</Select>
 				</Form.Item>
 

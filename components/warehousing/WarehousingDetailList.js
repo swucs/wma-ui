@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setWarehousingDetailItem, setDetailItemModalVisible } from '../../reducers/warehousingStore';
 import WarehousingDetailForm from './WarehousingDetailForm';
+import { formatNumber } from  "../../utils/formatUtil";
 
 const WarehousingDetailList = () => {
 	const dispatch = useDispatch();
@@ -35,13 +36,14 @@ const WarehousingDetailList = () => {
 			key: 'itemUnitWeight',
 			align: 'right',
 			width: 90,
-        },
+         },
 		{
 			title: '개수',
 			dataIndex: 'count',
 			key: 'count',
 			align: 'right',
 			width: 90,
+			render: (text, row) => formatNumber(text)
         },
 		{
 			title: '잔량',
@@ -49,6 +51,7 @@ const WarehousingDetailList = () => {
 			key: 'remainingWeight',
 			align: 'right',
 			width: 90,
+			render: (text, row) => formatNumber(text)
         },
 		{
             title: '총중량',
@@ -56,6 +59,7 @@ const WarehousingDetailList = () => {
             key: 'totalWeight',
 			align: 'right',
 			width: 120,
+			render: (text, row) => formatNumber(text)
         },
 		{
             title: '비고',
@@ -78,7 +82,7 @@ const WarehousingDetailList = () => {
 			<WarehousingDetailForm />
 			<div style={{display: 'flex'}}>
 				<div style={{textAlign : 'left', width: '70%'}}>
-					<RightCircleTwoTone twoToneColor="grey" /> 입출고 내역
+					<RightCircleTwoTone twoToneColor="#dddddd" /> 입출고 내역
 				</div>
 				<div style={{textAlign : 'right', width: '30%'}}>
 					<Button 
@@ -89,7 +93,14 @@ const WarehousingDetailList = () => {
 			</div>
 			<Table 
 				columns={columns}
-				dataSource={warehousingDetails}
+				dataSource={
+					warehousingDetails.map((v) => {
+						return {
+							...v,
+							key: v.id,
+						};
+					})
+				}
 				// loading={isListLoadingBar}
 				scroll={{x: 850, y: 170}} 
 				pagination={false}
