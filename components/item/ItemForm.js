@@ -143,7 +143,7 @@ const ItemForm = () => {
 	return (
 		<Modal 
 			style={{ top: 10 }}
-			title="품목정보"
+			title="품목"
 			visible={isDetailModalVisible} 
 			footer={null}
 			onCancel={handleConfirmCancel}

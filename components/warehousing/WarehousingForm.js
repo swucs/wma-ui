@@ -75,7 +75,7 @@ const WarehousingForm = () => {
 			})
 			.then((response) => {
 				console.log('data' + JSON.stringify(response.data));
-				if (response.data) {
+				if (response.data._embedded) {
 					dispatch(setWarehousingDetails(response.data._embedded.warehousingDetailDtoList));
 				} else {
 					dispatch(setWarehousingDetails([]));
@@ -94,9 +94,6 @@ const WarehousingForm = () => {
 	 * @param {*} warehousing 
 	 */
 	const onFinish = (warehousing) => {
-		alert(JSON.stringify(warehousing));
-		alert(JSON.stringify(warehousingDetails));
-		// return;
 		//사용자가 상세정보를 state에 저장
 		dispatch(setWarehousingItem({...warehousing}));
 
@@ -144,6 +141,7 @@ const WarehousingForm = () => {
 				method : 'put',
 				data : { 
 					...warehousing
+					, baseDate: warehousing.baseDate.format(DATE_FORMAT_YYYYMMDD)
 					, warehousingDetails : [
 						...warehousingDetails
 					]
@@ -246,7 +244,7 @@ const WarehousingForm = () => {
 	return (
 		<Modal 
 			style={{ top: 10 }}
-			title="입출고정보"
+			title="입출고"
 			visible={isDetailModalVisible} 
 			footer={null}
 			onCancel={handleConfirmCancel}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin, Popconfirm, InputNumber } from 'antd';
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
-import { setDetailItemModalVisible } from '../../reducers/warehousingStore';
+import { setWarehousingDetailItem, setDetailItemModalVisible } from '../../reducers/warehousingStore';
 
 
 const { Option } = Select;
@@ -13,12 +13,10 @@ const layout = {
 	},
 };
 
-  /* eslint-disable no-template-curly-in-string */
   
 const validateMessages = {
 	required: '${label}을(를) 입력하세요.'
 };
-  /* eslint-enable no-template-curly-in-string */
 
 const WarehousingDetailForm = () => {
 
@@ -55,7 +53,33 @@ const WarehousingDetailForm = () => {
 		});
 	}, []);
 
+	
+	/**
+	 * 무게계산
+	 */
+	const calculateWeight = () => {
+		const formValues = form.getFieldsValue();
 
+		const selectedItem = itemCodes.filter(code => code.id == formValues.itemId)[0];
+		// alert(JSON.stringify(selectedItem));
+
+		const totalWeight = (selectedItem.unitWeight * formValues.count) + formValues.remainingWeight;
+		// alert(totalWeight);
+
+		dispatch(setWarehousingDetailItem({
+			...warehousingDetailItem
+			, itemId: formValues.itemId
+			, itemUnitWeight: selectedItem.unitWeight
+			, itemUnitName: selectedItem.unitName
+			, totalWeight: totalWeight
+			, count: formValues.count
+			, remainingWeight: formValues.remainingWeight
+			, remarks: formValues.remarks
+			, calculationYn: formValues.calculationYn
+		}));
+	}
+
+	//취소버튼
 	const handleConfirmCancel = () => {
 		dispatch(setDetailItemModalVisible(false));
 	};
@@ -63,7 +87,7 @@ const WarehousingDetailForm = () => {
 	return (
 		<Modal 
 			style={{ top: 10 }}
-			title="입출고정보"
+			title="입출고 내역"
 			visible={isDetailItemModalVisible} 
 			footer={null}
 			onCancel={handleConfirmCancel}
@@ -73,6 +97,7 @@ const WarehousingDetailForm = () => {
 				form={form}
 				name="warehousing-detail-form"
 				// onFinish={onFinish} 
+				onValuesChange={calculateWeight}
 				{...layout}
 				// layout="horizontal"
 				validateMessages={validateMessages}
@@ -116,19 +141,20 @@ const WarehousingDetailForm = () => {
 				>
 					<Select
 						showSearch
+						// onChange={onChangeItemId}
 						filterOption={(input, option) =>
 							option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 						}
 					>
 						{itemCodes.map(code => (
-							<Option key={code.id} value={code.id}>{code.name}</Option>
+							<Option key={code.id} value={code.id} data={code}>{code.name}</Option>
 						))}
 					</Select>
 				</Form.Item>
 
 				<Form.Item
 					name="itemUnitWeight"
-					label="단위중량"	
+					label="단위중량"
 				>
 					<InputNumber
 						style={{ width: '100%', border: 0}} 
@@ -148,16 +174,18 @@ const WarehousingDetailForm = () => {
 					<InputNumber 
 						style={{ width: '100%'}} 
 						controls={false}
+						// onChange={calculateWeight}
 					/>
 				</Form.Item>
 
 				<Form.Item
 					name="remainingWeight"
-					label={`잔량(${warehousingDetailItem.itemUnitName})`}
+					label={`잔량${warehousingDetailItem.itemUnitName ? '(' + warehousingDetailItem.itemUnitName + ')' : ''}`}
 				>
 					<InputNumber
 						style={{ width: '100%'}} 
 						controls={false}
+						// onChange={calculateWeight}
 					/>
 				</Form.Item>
 

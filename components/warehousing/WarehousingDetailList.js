@@ -13,11 +13,21 @@ const WarehousingDetailList = () => {
 	//Redux State로 부터 거래처목록 모니터링
 	const warehousingDetails = useSelector((state) => state.warehousingStore.warehousingDetails);
 
+	//목록 클릭
 	const handlerClickName = (warehousingDetailItem) => {
 		console.log('warehousingDetailItem', warehousingDetailItem);
 		//입출고내역 세팅
 		dispatch(setWarehousingDetailItem(warehousingDetailItem));
 		//입출고내역팝업창 띄우기
+		dispatch(setDetailItemModalVisible(true));
+	};
+
+	//Add 클릭
+	const handleClickAdd = () => {
+		//비어있는 입출고내역 세팅
+		dispatch(setWarehousingDetailItem({itemUnitWeight: 0, totalWeight: 0, count: 0, remainingWeight: 0}));
+
+		//입출고내역팝업 띄우기
 		dispatch(setDetailItemModalVisible(true));
 	};
 
@@ -87,7 +97,7 @@ const WarehousingDetailList = () => {
 				<div style={{textAlign : 'right', width: '30%'}}>
 					<Button 
 						icon={<PlusOutlined />}
-						// onClick={handleClick}
+						onClick={handleClickAdd}
 					/>
 				</div>
 			</div>

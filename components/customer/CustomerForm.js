@@ -181,7 +181,7 @@ const CustomerForm = () => {
 	return (
 		<Modal 
 			style={{ top: 10 }}
-			title="거래처정보"
+			title="거래처"
 			visible={isDetailModalVisible} 
 			footer={null}
 			onCancel={handleConfirmCancel}
