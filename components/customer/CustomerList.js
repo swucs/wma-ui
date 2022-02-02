@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDetailCustomer, setDetailModalVisible } from '../../reducers/customerStore';
+import { setCustomerItem, setDetailModalVisible } from '../../reducers/customerStore';
 
 const CustomerList = () => {
 
@@ -28,7 +28,7 @@ const CustomerList = () => {
 	 */
 	const handlerClickName = (customer) => {
 		//상세정보 세팅
-		dispatch(setDetailCustomer(customer));
+		dispatch(setCustomerItem(customer));
 		//상세팝업창 띄우기
 		dispatch(setDetailModalVisible(true));
 	}

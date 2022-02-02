@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin, Popconfirm } from 'antd';
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
-import { setCustomers, setDetailCustomer, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/customerStore';
+import { setCustomers, setCustomerItem, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/customerStore';
 
 const { Option } = Select;
 
@@ -28,7 +28,7 @@ const CustomerForm = () => {
 
 	const dispatch = useDispatch();
 	const isDetailModalVisible = useSelector(state => state.customerStore.isDetailModalVisible);	//상세팝업출력여부
-	const detailCustomer = useSelector(state => state.customerStore.detailCustomer);				//상세거래처정보
+	const customerItem = useSelector(state => state.customerStore.customerItem);				//상세거래처정보
 	const customers = useSelector(state => state.customerStore.customers);							//거래처목록
 	const isDetailLoadingBar = useSelector(state => state.customerStore.isDetailLoadingBar);		//상세정보 로딩바
 
@@ -37,12 +37,12 @@ const CustomerForm = () => {
 	const onFinish = (customer) => {
 		// alert(JSON.stringify(customer));
 		//사용자가 상세정보를 state에 저장
-		dispatch(setDetailCustomer({...customer}));
+		dispatch(setCustomerItem({...customer}));
 
 		//로딩바
 		dispatch(setDetailLoadingBar(true));
 
-		if (!detailCustomer.id) {
+		if (!customerItem.id) {
 
 			//거래처정보 생성
 			axiosUtil({
@@ -79,7 +79,7 @@ const CustomerForm = () => {
 		} else {
 			//거래처정보 수정
 			axiosUtil({
-				url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${detailCustomer.id}`,
+				url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customerItem.id}`,
 				method : 'put',
 				data : customer
 			})
@@ -94,12 +94,12 @@ const CustomerForm = () => {
 				//목록 갱신하기
 				dispatch(setCustomers(
 					customers.map(customer => {
-						return customer.id === detailCustomer.id ? {...response.data} : customer
+						return customer.id === customerItem.id ? {...response.data, key: customerItem.id} : customer
 					})
 				));
 
 				//상세정보 갱신
-				dispatch(setDetailCustomer({...response.data}));
+				// dispatch(setCustomerItem({...response.data}));
 
 			})
 			.catch((error) => {
@@ -140,7 +140,7 @@ const CustomerForm = () => {
 		
 		//거래처정보 삭제
 		axiosUtil({
-			url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${detailCustomer.id}`,
+			url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customerItem.id}`,
 			method : 'delete',
 		})
 		.then((response) => {
@@ -153,7 +153,7 @@ const CustomerForm = () => {
 
 			//목록 갱신하기
 			dispatch(setCustomers(
-				customers.filter(customer => customer.id != detailCustomer.id)
+				customers.filter(customer => customer.id != customerItem.id)
 			));
 
 			//팝업창 닫기
@@ -197,43 +197,43 @@ const CustomerForm = () => {
 				fields={[
 					{
 						name: 'id',
-						value: detailCustomer.id,
+						value: customerItem.id,
 					},
 					{
 						name: 'name',
-						value: detailCustomer.name,
+						value: customerItem.name,
 				 	},
 					{
 						name: 'businessNumber',
-						value: detailCustomer.businessNumber,
+						value: customerItem.businessNumber,
 				 	},
 					{
 						name: 'representativeName',
-						value: detailCustomer.representativeName,
+						value: customerItem.representativeName,
 				 	},
 					{
 						name: 'businessConditions',
-						value: detailCustomer.businessConditions,
+						value: customerItem.businessConditions,
 				 	},
 					{
 						name: 'typeOfBusiness',
-						value: detailCustomer.typeOfBusiness,
+						value: customerItem.typeOfBusiness,
 				 	},
 					{
 						name: 'address',
-						value: detailCustomer.address,
+						value: customerItem.address,
 				 	},
 					{
 						name: 'phoneNumber',
-						value: detailCustomer.phoneNumber,
+						value: customerItem.phoneNumber,
 				 	},
 					{
 						name: 'faxNumber',
-						value: detailCustomer.faxNumber,
+						value: customerItem.faxNumber,
 				 	},
 					{
 						name: 'useYn',
-						value: detailCustomer.useYn,
+						value: customerItem.useYn,
 				 	},
 				]}
 			>
@@ -329,7 +329,7 @@ const CustomerForm = () => {
 						</Button>
 						{
 							//신규가 아닌 경우만 삭제버튼 노출
-							detailCustomer.id &&
+							customerItem.id &&
 							<Popconfirm
 								title="삭제하시겠습니까?"
 								onConfirm={handleConfirmDelete}

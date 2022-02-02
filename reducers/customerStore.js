@@ -4,7 +4,7 @@ const initialState = {
     }, 
 	isDetailModalVisible: false,	//상세 Modal창 출력여부
 	customers: [],					//거래처목록
-	detailCustomer: {},				//거래처상세데이터
+	customerItem: {},				//거래처상세데이터
 	isListLoadingBar: false,		//목록 로딩바
 	isDetailLoadingBar: false,		//상세 로딩바
 };
@@ -26,6 +26,14 @@ export const setCustomers = (data) => {
     };
 };
 
+//상세 거래처정보 세팅
+export const setCustomerItem = (data) => {
+    return {
+        type: 'SET_CUSTOMER_ITEM',
+        data
+    };
+};
+
 //목록 로딩바 출력
 export const setListLoadingBar = (data) => {
     return {
@@ -38,14 +46,6 @@ export const setListLoadingBar = (data) => {
 export const setDetailModalVisible = (data) => {
     return {
         type: 'SET_DETAIL_MODAL_VISIBLE',
-        data
-    };
-};
-
-//상세 거래처정보 세팅
-export const setDetailCustomer = (data) => {
-    return {
-        type: 'SET_DETAIL_CUSTOMER',
         data
     };
 };
@@ -87,10 +87,10 @@ export const customerStore = (state = initialState, action) => {
                 isDetailModalVisible: action.data,
             }
         }
-		case 'SET_DETAIL_CUSTOMER': {
+		case 'SET_CUSTOMER_ITEM': {
             return {
                 ...state,
-                detailCustomer: {...action.data},
+                customerItem: {...action.data},
             }
         }
 		case 'SET_DETAIL_LOADING_BAR': {

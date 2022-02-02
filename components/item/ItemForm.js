@@ -95,12 +95,12 @@ const ItemForm = () => {
 				//목록 갱신하기
 				dispatch(setItems(
 					items.map(item => {
-						return item.id === detailItem.id ? {...response.data} : item
+						return item.id === detailItem.id ? {...response.data, key: detailItem.id} : item
 					})
 				));
 
 				//상세정보 갱신
-				dispatch(setDetailItem({...response.data}));
+				// dispatch(setDetailItem({...response.data}));
 
 			})
 			.catch((error) => {
@@ -132,44 +132,6 @@ const ItemForm = () => {
 			}]);
 		}
 	}
-
-
-	/**
-	 * 삭제버튼 클릭 후 Confirm 시
-	 */
-	const handleConfirmDelete = () => {
-		
-		//품목정보 삭제
-		axiosUtil({
-			url : `${process.env.NEXT_PUBLIC_API_URL}/api/item/${detailItem.id}`,
-			method : 'delete',
-		})
-		.then((response) => {
-			console.log(response.data);
-			
-			//로딩바 감추기
-			dispatch(setDetailLoadingBar(false));
-
-			message.success('품목정보가 삭제되었습니다.');
-
-			//목록 갱신하기
-			dispatch(setItems(
-				items.filter(item => item.id != detailItem.id)
-			));
-
-			//팝업창 닫기
-			dispatch(setDetailModalVisible(false));
-
-		})
-		.catch((error) => {
-			alert('에러발생 : ItemForm.js');
-			//로딩바 감추기
-			dispatch(setDetailLoadingBar(false));
-			console.log(error);
-		});
-
-	}
-
 
 	/**
 	 * 취소Alert창의 confirm 버튼
@@ -224,7 +186,7 @@ const ItemForm = () => {
 				<Form.Item
 					name="id"
 					label="ID"
-					hidden={true}
+					noStyle
 				>
 					<Input type="hidden" />
 				</Form.Item>
