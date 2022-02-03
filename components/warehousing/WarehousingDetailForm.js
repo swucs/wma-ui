@@ -37,6 +37,11 @@ const WarehousingDetailForm = () => {
 	 * 코드정보(Selectbox용)
 	 */
 	 useEffect(() => {
+
+		if (!warehousingItem.customerId) {
+			return;
+		}
+
 		//품목목록
 		axiosUtil({
 			url : `${process.env.NEXT_PUBLIC_API_URL}/api/item/customer/${warehousingItem.customerId}/codes`,
@@ -52,7 +57,7 @@ const WarehousingDetailForm = () => {
 		.catch((error) => {
 			console.log(error);
 		});
-	}, []);
+	}, [warehousingItem.customerId]);
 
 	
 	/**
@@ -110,13 +115,13 @@ const WarehousingDetailForm = () => {
 			, calculationYn: formValues.calculationYn
 		};
 
-		alert(JSON.stringify(inputData));
+		// alert(JSON.stringify(inputData));
 
 		dispatch(setWarehousingDetailItem(inputData));
 
 
 		if (warehousingDetailItem.key == null) {
-			alert("new");
+			// alert("new");
 			//입출고내역 리스트에 추가
 			const duplicatedItemLength = warehousingDetails.filter(e => e.itemId === inputData.itemId).length;
 			if (duplicatedItemLength > 0) {
@@ -129,11 +134,11 @@ const WarehousingDetailForm = () => {
 				, {...inputData, key: inputData.itemId}
 			]));
 		} else {
-			alert("update");
+			// alert("update");
 			//입출고내역 리스트에 반영
 			dispatch(setWarehousingDetails(
 				warehousingDetails.map((e, i) => {
-					alert(e.key + " : " + inputData.key);
+					// alert(e.key + " : " + inputData.key);
 					return e.key === inputData.key ? { ...inputData} : e
 				})
 			));

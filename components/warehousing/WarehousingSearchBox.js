@@ -25,7 +25,12 @@ const WarehousingSearchBox = () => {
 	//신규버튼
 	const handleClick = () => {
 		//비어있는 상세정보 세팅
-		dispatch(setWarehousingItem({baseDate : moment(new Date()).format(DATE_FORMAT_YYYYMMDD)}));
+		dispatch(setWarehousingItem(
+			{
+				baseDate : moment(new Date()).format(DATE_FORMAT_YYYYMMDD)
+				, militarySupplyYn: 'N'
+			}
+		));
 
 		//상세팝업 띄우기
 		dispatch(setDetailModalVisible(true));

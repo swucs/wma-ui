@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, DatePicker, Select, Button, Divider, Space, message, Spin, Popconfirm, InputNumber } from 'antd';
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
-import { setWarehousings, setWarehousingItem, setWarehousingDetails, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/warehousingStore';
+import { queryWarehousings, setWarehousings, setWarehousingItem, setWarehousingDetails, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/warehousingStore';
 import WarehousingDetailList from "./WarehousingDetailList";
 import moment from 'moment';
 import { DATE_FORMAT_YYYYMMDD } from  "../../utils/formatUtil";
@@ -33,9 +33,10 @@ const WarehousingForm = () => {
 	const warehousingItem = useSelector(state => state.warehousingStore.warehousingItem);				//상세입출고정보
 	const warehousingDetails = useSelector(state => state.warehousingStore.warehousingDetails);				//입출고내역목록
 	const isDetailLoadingBar = useSelector(state => state.warehousingStore.isDetailLoadingBar);		//상세정보 로딩바
+	const searchWord = useSelector(state => state.warehousingStore.searchWord);
 
 	//기준일자, 거래처 등 편집가능여부
-	const isEditable = warehousingItem.id ? false : true;
+	const isDisable = warehousingItem.id ? true : false;
 
 	//거래처목록
 	const [customerCodes, setCustomerCodes] = useState([]);
@@ -46,7 +47,6 @@ const WarehousingForm = () => {
 	 * 코드정보(Selectbox용)
 	 */
 	useEffect(() => {
-
 		//거래처목록
 		axiosUtil({
 			url : `${process.env.NEXT_PUBLIC_API_URL}/api/customer/validCodes`,
@@ -74,12 +74,13 @@ const WarehousingForm = () => {
 			dispatch(setWarehousingDetails([]));
 		}
 			
-	}, [warehousingItem.id]);
+	}, [isDetailModalVisible]);
 
 	/**
 	 * 입출고내역 목록 갱신
 	 */
 	const displayDetails = () => {
+
 		axiosUtil({
 			url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${warehousingItem.id}/details`,
 			method : 'get',
@@ -100,14 +101,60 @@ const WarehousingForm = () => {
 			console.log(error);
 		});
 	}
+
+	//Customer 변경시 state에 반영
+	const onChangeCustomerId = (customerId) => {
+
+		if (warehousingDetails.length > 0) {
+			if (!confirm("거래처 변경시에는 입출고 내역을 삭제해야 합니다. 입출고 내역을 삭제하시겠습니까?")) {
+				// dispatch(setWarehousingItem({...warehousingItem}));
+				form.setFieldsValue({
+					...form.getFieldsValue()
+					, customerId: warehousingItem.customerId
+				});
+				return;
+			}
+			dispatch(setWarehousingDetails([]));
+		}
+
+		renewWarehousingItemByFormData();
+	};
+
+	//군납여부 변경시
+	const onChangeMilitarySupplyYn = (militarySupplyYn) => {
+		if (militarySupplyYn === 'Y') {
+			// dispatch(setWarehousingItem({...warehousingItem, militarySupplyYn: militarySupplyYn, name: '군납', warehousingTypeValue: 'OUTGOING'}));
+			form.setFieldsValue({
+				...form.getFieldsValue()
+				, name: '군납'
+				, warehousingTypeValue: 'OUTGOING'
+			});
+
+		} else {
+			// dispatch(setWarehousingItem({...warehousingItem, militarySupplyYn: militarySupplyYn, name: '', warehousingTypeValue: 'INCOMING'}));
+			form.setFieldsValue({
+				...form.getFieldsValue()
+				, name: ''
+				, warehousingTypeValue: 'INCOMING'
+			});
+		}
+	}
+
+	/**
+	 * 입력된 formData를 warehousingItem에 갱신하기
+	 */
+	const renewWarehousingItemByFormData = () => {
+		// alert(JSON.stringify(form.getFieldsValue()));
+		dispatch(setWarehousingItem({...form.getFieldsValue()}));
+	};
 	
 	/**
 	 * 저장
 	 * @param {*} formData 
 	 */
 	const onFinish = (formData) => {
-		//사용자가 상세정보를 state에 저장
-		dispatch(setWarehousingItem({...formData}));
+		//입력된 formData를 warehousingItem에 갱신
+		renewWarehousingItemByFormData();
 
 		// //로딩바
 		dispatch(setDetailLoadingBar(true));
@@ -134,8 +181,8 @@ const WarehousingForm = () => {
 
 				message.success('입출고정보가 생성되었습니다.');
 
-				//목록에 추가하기
-				dispatch(setWarehousings([...warehousings, {...response.data}]));
+				//목록 갱신
+				dispatch(queryWarehousings({...searchWord}));
 
 				//팝업창 닫기
 				dispatch(setDetailModalVisible(false));
@@ -265,6 +312,7 @@ const WarehousingForm = () => {
 
 	return (
 		<Modal 
+			width={700}
 			style={{ top: 10 }}
 			title="입출고"
 			visible={isDetailModalVisible} 
@@ -325,7 +373,7 @@ const WarehousingForm = () => {
 						required: true,
 					}]}
 				>
-					<DatePicker disabled={true}
+					<DatePicker disabled={isDisable}
 					/>
 				</Form.Item>
 
@@ -336,7 +384,10 @@ const WarehousingForm = () => {
 						required: true,
 					}]}
 				>
-					<Select disabled={true}>
+					<Select 
+						disabled={isDisable}
+						onChange={onChangeCustomerId}
+					>
 						{customerCodes.map(code => (
 							<Option key={code.id} value={code.id}>{code.name}</Option>
 						))}
@@ -353,7 +404,9 @@ const WarehousingForm = () => {
 						required: true,
 					}]}
 				>
-					<Select>
+					<Select
+						onChange={onChangeMilitarySupplyYn}
+					>
 						<Option value="N">N</Option>
 						<Option value="Y">Y</Option>
 					</Select>
@@ -398,7 +451,7 @@ const WarehousingForm = () => {
 			
 
 				{/* 입출고 내역 */}
-				<WarehousingDetailList />
+				<WarehousingDetailList renewWarehousingItemByFormData={renewWarehousingItemByFormData} />
 				{/* 입출고 내역 */}
 
 				<div style={{textAlign : 'right'}}>

@@ -7,7 +7,7 @@ import { setWarehousingDetails, setWarehousingDetailItem, setDetailItemModalVisi
 import WarehousingDetailForm from './WarehousingDetailForm';
 import { formatNumber } from  "../../utils/formatUtil";
 
-const WarehousingDetailList = () => {
+const WarehousingDetailList = (props) => {
 	const dispatch = useDispatch();
 
 	//Redux State 모니터링
@@ -20,6 +20,9 @@ const WarehousingDetailList = () => {
 
 	//목록 클릭
 	const handlerClickName = (rowData) => {
+		//입력된 입출고정보를 state에 갱신
+		props.renewWarehousingItemByFormData();
+
 		console.log('rowData', rowData);
 		//입출고내역 세팅
 		dispatch(setWarehousingDetailItem(rowData));
@@ -29,6 +32,9 @@ const WarehousingDetailList = () => {
 
 	//Add 클릭
 	const handleClickAdd = () => {
+		//입력된 입출고정보를 state에 갱신
+		props.renewWarehousingItemByFormData();
+
 		//비어있는 입출고내역 세팅
 		dispatch(setWarehousingDetailItem({itemUnitWeight: 0, totalWeight: 0, count: 0, remainingWeight: 0, calculationYn: 'Y'}));
 
@@ -36,12 +42,29 @@ const WarehousingDetailList = () => {
 		dispatch(setDetailItemModalVisible(true));
 	};
 
+	//입출고내역 삭제
+	const handleRemoveDetail = (itemId) => {
+		dispatch(setWarehousingDetails(
+			warehousingDetails.filter(e => e.key !== itemId)
+		));
+	};
+
 	const columns = [
+		{
+			title: '삭제',
+			dataIndex: 'itemId',
+			key: 'itemId',
+			align: 'center',
+			width: 70,
+			render: (value, row, index) => (
+				<Button key={`remove_{value}`} size="small" value={value} onClick={() => { handleRemoveDetail(value) }}>삭제</Button>
+			),
+        },
 		{
             title: '품목',
             dataIndex: 'itemName',
             key: 'itemName',
-			align: 'center',
+			align: 'left',
             // width: 150,
 			render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
         },
@@ -81,7 +104,7 @@ const WarehousingDetailList = () => {
             dataIndex: 'remarks',
             key: 'remarks',
 			align: 'left',
-			width: 200,
+			width: 150,
         },
         {
 			title: '계산여부',
@@ -90,6 +113,7 @@ const WarehousingDetailList = () => {
 			align: 'center',
 			width: 90,
         },
+		
     ];
       
     return (
