@@ -3,21 +3,26 @@ import { Table, Button } from 'antd';
 import { PlusOutlined, RightCircleTwoTone } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setWarehousingDetailItem, setDetailItemModalVisible } from '../../reducers/warehousingStore';
+import { setWarehousingDetails, setWarehousingDetailItem, setDetailItemModalVisible, setWarehousingItem } from '../../reducers/warehousingStore';
 import WarehousingDetailForm from './WarehousingDetailForm';
 import { formatNumber } from  "../../utils/formatUtil";
 
 const WarehousingDetailList = () => {
 	const dispatch = useDispatch();
 
-	//Redux State로 부터 거래처목록 모니터링
+	//Redux State 모니터링
+	const warehousingItem = useSelector((state) => state.warehousingStore.warehousingItem);
 	const warehousingDetails = useSelector((state) => state.warehousingStore.warehousingDetails);
+	
+	useEffect(() => {
+		console.log(warehousingDetails)
+	}, [warehousingDetails]);
 
 	//목록 클릭
-	const handlerClickName = (warehousingDetailItem) => {
-		console.log('warehousingDetailItem', warehousingDetailItem);
+	const handlerClickName = (rowData) => {
+		console.log('rowData', rowData);
 		//입출고내역 세팅
-		dispatch(setWarehousingDetailItem(warehousingDetailItem));
+		dispatch(setWarehousingDetailItem(rowData));
 		//입출고내역팝업창 띄우기
 		dispatch(setDetailItemModalVisible(true));
 	};
@@ -25,7 +30,7 @@ const WarehousingDetailList = () => {
 	//Add 클릭
 	const handleClickAdd = () => {
 		//비어있는 입출고내역 세팅
-		dispatch(setWarehousingDetailItem({itemUnitWeight: 0, totalWeight: 0, count: 0, remainingWeight: 0}));
+		dispatch(setWarehousingDetailItem({itemUnitWeight: 0, totalWeight: 0, count: 0, remainingWeight: 0, calculationYn: 'Y'}));
 
 		//입출고내역팝업 띄우기
 		dispatch(setDetailItemModalVisible(true));
@@ -103,14 +108,7 @@ const WarehousingDetailList = () => {
 			</div>
 			<Table 
 				columns={columns}
-				dataSource={
-					warehousingDetails.map((v) => {
-						return {
-							...v,
-							key: v.id,
-						};
-					})
-				}
+				dataSource={warehousingDetails}
 				// loading={isListLoadingBar}
 				scroll={{x: 850, y: 170}} 
 				pagination={false}

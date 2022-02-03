@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin, Popconfirm, InputNumber } from 'antd';
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
-import { setWarehousingDetailItem, setDetailItemModalVisible } from '../../reducers/warehousingStore';
+import { setWarehousingDetailItem, setWarehousingDetails, setDetailItemModalVisible } from '../../reducers/warehousingStore';
 
 
 const { Option } = Select;
@@ -26,6 +26,7 @@ const WarehousingDetailForm = () => {
 
 	//Redux State로 부터 거래처목록 모니터링
 	const warehousingItem = useSelector((state) => state.warehousingStore.warehousingItem);
+	const warehousingDetails = useSelector((state) => state.warehousingStore.warehousingDetails);
 	const warehousingDetailItem = useSelector((state) => state.warehousingStore.warehousingDetailItem);
 	const isDetailItemModalVisible = useSelector(state => state.warehousingStore.isDetailItemModalVisible);	//입출고내역 팝업출력여부
 
@@ -69,6 +70,7 @@ const WarehousingDetailForm = () => {
 		dispatch(setWarehousingDetailItem({
 			...warehousingDetailItem
 			, itemId: formValues.itemId
+			, itemName: selectedItem.name
 			, itemUnitWeight: selectedItem.unitWeight
 			, itemUnitName: selectedItem.unitName
 			, totalWeight: totalWeight
@@ -84,6 +86,63 @@ const WarehousingDetailForm = () => {
 		dispatch(setDetailItemModalVisible(false));
 	};
 
+	/**
+	 * 확인버튼
+	 * @param {*} formValues
+	 */
+	const onFinish = (formValues) => {
+
+		if (formValues.totalWeight === 0) {
+			form.setFields([{
+				name : 'totalWeight'
+				, errors : ["0보다 큰 값이어야 합니다."]
+			}]);
+			return;
+		}
+
+		const inputData = {
+			...warehousingDetailItem
+			, itemId: formValues.itemId
+			, totalWeight: formValues.totalWeight
+			, count: formValues.count
+			, remainingWeight: formValues.remainingWeight
+			, remarks: formValues.remarks
+			, calculationYn: formValues.calculationYn
+		};
+
+		alert(JSON.stringify(inputData));
+
+		dispatch(setWarehousingDetailItem(inputData));
+
+
+		if (warehousingDetailItem.key == null) {
+			alert("new");
+			//입출고내역 리스트에 추가
+			const duplicatedItemLength = warehousingDetails.filter(e => e.itemId === inputData.itemId).length;
+			if (duplicatedItemLength > 0) {
+				message.error("이미 등록된 품목입니다.");
+				return;
+			}
+
+			dispatch(setWarehousingDetails([
+				...warehousingDetails
+				, {...inputData, key: inputData.itemId}
+			]));
+		} else {
+			alert("update");
+			//입출고내역 리스트에 반영
+			dispatch(setWarehousingDetails(
+				warehousingDetails.map((e, i) => {
+					alert(e.key + " : " + inputData.key);
+					return e.key === inputData.key ? { ...inputData} : e
+				})
+			));
+		}
+
+		//팝업닫기
+		dispatch(setDetailItemModalVisible(false));
+	};
+
 	return (
 		<Modal 
 			style={{ top: 10 }}
@@ -96,12 +155,12 @@ const WarehousingDetailForm = () => {
 			<Form 
 				form={form}
 				name="warehousing-detail-form"
-				// onFinish={onFinish} 
+				onFinish={onFinish} 
 				onValuesChange={calculateWeight}
 				{...layout}
 				// layout="horizontal"
 				validateMessages={validateMessages}
-				fields={[
+				fields={[ 
 					{
 						name: 'itemId',
 						value: warehousingDetailItem.itemId,
@@ -145,9 +204,10 @@ const WarehousingDetailForm = () => {
 						filterOption={(input, option) =>
 							option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 						}
+						disabled={warehousingDetailItem.key != null}
 					>
 						{itemCodes.map(code => (
-							<Option key={code.id} value={code.id} data={code}>{code.name}</Option>
+							<Option key={code.id} value={code.id} data={code}>{code.nameDescription}</Option>
 						))}
 					</Select>
 				</Form.Item>
@@ -185,7 +245,6 @@ const WarehousingDetailForm = () => {
 					<InputNumber
 						style={{ width: '100%'}} 
 						controls={false}
-						// onChange={calculateWeight}
 					/>
 				</Form.Item>
 
@@ -219,21 +278,19 @@ const WarehousingDetailForm = () => {
 						<Option value="Y">계산</Option>
 						<Option value="N">제외</Option>
 					</Select>
-				</Form.Item>				
+				</Form.Item>
+
+				<div style={{textAlign : 'right'}}>
+					<Space>
+						<Button onClick={handleConfirmCancel}>
+							취소
+						</Button>
+						<Button type="primary" htmlType="submit">
+							확인
+						</Button>
+					</Space>
+				</div>			
 			</Form>
-
-			<div style={{textAlign : 'right'}}>
-				<Space>
-					<Button onClick={handleConfirmCancel}>
-						취소
-					</Button>
-					<Button type="primary" htmlType="submit">
-						확인
-					</Button>
-				</Space>
-			</div>
-
-
 		</Modal>
 		
 

@@ -65,37 +65,49 @@ const WarehousingForm = () => {
 	}, []);
 
 	/**
-	 * 입출고 상세내역 목록
+	 * 입출고내역 목록
 	 */
 	useEffect(() => {
 		if (warehousingItem.id) {
-			axiosUtil({
-				url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${warehousingItem.id}/details`,
-				method : 'get',
-			})
-			.then((response) => {
-				console.log('data' + JSON.stringify(response.data));
-				if (response.data._embedded) {
-					dispatch(setWarehousingDetails(response.data._embedded.warehousingDetailDtoList));
-				} else {
-					dispatch(setWarehousingDetails([]));
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+			displayDetails();
 		} else {
 			dispatch(setWarehousingDetails([]));
 		}
-	}, [warehousingItem]);
+			
+	}, [warehousingItem.id]);
+
+	/**
+	 * 입출고내역 목록 갱신
+	 */
+	const displayDetails = () => {
+		axiosUtil({
+			url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${warehousingItem.id}/details`,
+			method : 'get',
+		})
+		.then((response) => {
+			console.log('data' + JSON.stringify(response.data));
+			if (response.data._embedded) {
+				dispatch(setWarehousingDetails(
+					response.data._embedded.warehousingDetailDtoList.map(v => {
+						return {...v, key: v.itemId}
+					})
+				));
+			} else {
+				dispatch(setWarehousingDetails([]));
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+	}
 	
 	/**
 	 * 저장
-	 * @param {*} warehousing 
+	 * @param {*} formData 
 	 */
-	const onFinish = (warehousing) => {
+	const onFinish = (formData) => {
 		//사용자가 상세정보를 state에 저장
-		dispatch(setWarehousingItem({...warehousing}));
+		dispatch(setWarehousingItem({...formData}));
 
 		// //로딩바
 		dispatch(setDetailLoadingBar(true));
@@ -106,7 +118,13 @@ const WarehousingForm = () => {
 			axiosUtil({
 				url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing`,
 				method : 'post',
-				data : warehousing
+				data : { 
+					...formData
+					, baseDate: formData.baseDate.format(DATE_FORMAT_YYYYMMDD)
+					, warehousingDetails : [
+						...warehousingDetails
+					]
+				}
 			})
 			.then((response) => {
 				console.log(response.data);
@@ -140,8 +158,8 @@ const WarehousingForm = () => {
 				url : `${process.env.NEXT_PUBLIC_API_URL}/api/warehousing/${warehousingItem.id}`,
 				method : 'put',
 				data : { 
-					...warehousing
-					, baseDate: warehousing.baseDate.format(DATE_FORMAT_YYYYMMDD)
+					...formData
+					, baseDate: formData.baseDate.format(DATE_FORMAT_YYYYMMDD)
 					, warehousingDetails : [
 						...warehousingDetails
 					]
@@ -157,13 +175,17 @@ const WarehousingForm = () => {
 
 				//목록 갱신하기
 				dispatch(setWarehousings(
-					warehousings.map(warehousing => {
-						return warehousing.id === warehousingItem.id ? {...response.data, key: warehousingItem.id} : warehousing
+					warehousings.map((e, i) => {
+						return e.id === warehousingItem.id ? {...response.data} : e
 					})
 				));
 
+
 				//상세정보 갱신
-				// dispatch(setWarehousingItem({...response.data}));
+				dispatch(setWarehousingItem({...response.data}));
+
+				//입출고내역 갱신
+				displayDetails();
 
 			})
 			.catch((error) => {
