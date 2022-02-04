@@ -22,6 +22,8 @@ const AppLayout = ({ children }) => {
             <Sider
                 breakpoint="lg"
                 collapsedWidth="0"
+                style={{ height: '100vh' }}
+                
                 // onBreakpoint={broken => {
                 //   console.log(broken);
                 // }}

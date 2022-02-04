@@ -119,7 +119,7 @@ const WarehousingDetailList = (props) => {
     return (
 		<>
 			<WarehousingDetailForm />
-			<div style={{display: 'flex'}}>
+			<div style={{display: 'flex', paddingBottom: 5}}>
 				<div style={{textAlign : 'left', width: '70%'}}>
 					<RightCircleTwoTone twoToneColor="#dddddd" /> 입출고 내역
 				</div>

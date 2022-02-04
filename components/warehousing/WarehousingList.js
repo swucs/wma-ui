@@ -1,10 +1,11 @@
 import React from 'react';
 import { Table } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setWarehousingItem, setDetailModalVisible } from '../../reducers/warehousingStore';
 
 const WarehousingList = () => {
+	const gridRef = useRef(null);
 
 	const [newData, setNewData] = useState([]);
 	const [scrollY, setScrollY] = useState([]);
@@ -20,7 +21,9 @@ const WarehousingList = () => {
 	 */
 	const handleResize = () => {
 		console.log("handleResize: " + window.innerHeight);
-		setScrollY(window.innerHeight - 158);
+		// alert(gridRef.current.getBoundingClientRect().top);
+		// alert(window.innerHeight);
+		setScrollY(document.body.getBoundingClientRect().bottom - gridRef.current.getBoundingClientRect().top - 50);
 		// ant-space-item
 	}
 
@@ -101,7 +104,7 @@ const WarehousingList = () => {
     ];
       
     return (
-		<div style={{height: scrollY + 65,}}>
+		<div ref={gridRef}>
 			<Table 
 				columns={columns}
 				dataSource={newData}

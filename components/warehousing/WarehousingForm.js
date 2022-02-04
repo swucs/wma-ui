@@ -454,11 +454,25 @@ const WarehousingForm = () => {
 				<WarehousingDetailList renewWarehousingItemByFormData={renewWarehousingItemByFormData} />
 				{/* 입출고 내역 */}
 
-				<div style={{textAlign : 'right'}}>
+				<div style={{textAlign : 'right', paddingTop: 5 }}>
 					<Space>
 						<Button onClick={handleConfirmCancel}>
 							취소
 						</Button>
+						{	//신규가 아닌 경우만 삭제버튼 노출
+							warehousingItem.id &&
+							<Popconfirm
+								title="삭제하시겠습니까?"
+								onConfirm={handleConfirmDelete}
+								okText="Yes"
+								cancelText="No"
+							>
+								<Button type="primary">
+									삭제
+								</Button>
+							</Popconfirm>
+						}
+
 						<Button type="primary" htmlType="submit">
 							저장
 						</Button>
