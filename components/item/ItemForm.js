@@ -9,10 +9,10 @@ const { Option } = Select;
 
 const layout = {
 	labelCol: {
-	  span: 6,
+	  span: 5,
 	},
 	wrapperCol: {
-	  span: 16,
+	  span: 18,
 	},
 };
 

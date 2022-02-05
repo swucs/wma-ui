@@ -18,3 +18,15 @@
   .ant-layout-sider-zero-width-trigger-left {
     top : 0px;
   }
+
+  .ant-col {
+    padding: 2px !important;
+  }
+
+  .ant-row {
+    margin-bottom: 10px;
+  }
+
+  .ant-modal-body {
+    padding: 10px;
+  }

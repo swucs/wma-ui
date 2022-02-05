@@ -42,14 +42,14 @@ const ItemSearchBox = () => {
 						placeholder="품목명"
 						enterButton="Search"
 						allowClear
-						size="large"
+						size="normal"
 						//   suffix={suffix}
 						  onSearch={handleSearch}
 						/>
 					
 					<Button 
 						icon={<PlusOutlined />}
-						size="large"
+						size="normal"
 						// type="primary"
 						onClick={handleClick} />
 				</Space>

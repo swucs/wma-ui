@@ -15,6 +15,9 @@ const layout = {
 	labelCol: {
 	  span: 4,
 	},
+	wrapperCol: {
+	  span: 19,
+	},
 };
 
   /* eslint-disable no-template-curly-in-string */
@@ -451,10 +454,12 @@ const WarehousingForm = () => {
 			
 
 				{/* 입출고 내역 */}
-				<WarehousingDetailList renewWarehousingItemByFormData={renewWarehousingItemByFormData} />
+				<div style={{paddingTop: 15 }}>
+					<WarehousingDetailList renewWarehousingItemByFormData={renewWarehousingItemByFormData} />
+				</div>
 				{/* 입출고 내역 */}
 
-				<div style={{textAlign : 'right', paddingTop: 5 }}>
+				<div style={{textAlign : 'right', paddingTop: 10 }}>
 					<Space>
 						<Button onClick={handleConfirmCancel}>
 							취소

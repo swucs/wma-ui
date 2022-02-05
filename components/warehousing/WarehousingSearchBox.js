@@ -86,17 +86,17 @@ const WarehousingSearchBox = () => {
 			<Space wrap>
 				
 				<Form.Item name="baseDateFrom" style={{margin: 0, display: 'inline-block'}}>
-					<DatePicker size="large" style={{width:135}} />
+					<DatePicker size="normal" style={{width:130}} />
 				</Form.Item>
 				<Form.Item name="baseDateTo" style={{margin: 0, display: 'inline-block'}}>
-					<DatePicker size="large" style={{width:135}} />
+					<DatePicker size="normal" style={{width:130}} />
 				</Form.Item>
 
 				<Form.Item name="warehousingTypeValue" style={{margin: 0, display: 'inline-block'}}>
 					<Select 
 						onChange={handleChange}
-						style={{width:80}}
-						size="large"
+						style={{width:70}}
+						size="normal"
 					>
 						<Option value="">전체</Option>
 						<Option value="INCOMING">입고</Option>
@@ -107,16 +107,16 @@ const WarehousingSearchBox = () => {
 				<Form.Item name="customerName" style={{margin: 0, display: 'inline-block'}}>
 					<Input
 						placeholder="고객명"
-						style={{width: 120}}
-						size="large"
+						style={{width: 110}}
+						size="normal"
 					/>
 				</Form.Item>
 
 				<Form.Item name="itemName" style={{margin: 0, display: 'inline-block'}}>
 					<Input
 						placeholder="품목명"
-						style={{width: 120}}
-						size="large"
+						style={{width: 110}}
+						size="normal"
 					/>
 				</Form.Item>
 
@@ -124,7 +124,7 @@ const WarehousingSearchBox = () => {
 					<Button
 						type="primary"
 						htmlType="submit"
-						size="large"
+						size="normal"
 						style={{margin: 0}}
 					>
 						Search
@@ -134,7 +134,7 @@ const WarehousingSearchBox = () => {
 				<Form.Item style={{margin: 0, display: 'inline-block'}}>
 					<Button 
 						icon={<PlusOutlined />}
-						size="large"
+						size="normal"
 						onClick={handleClick} />
 				</Form.Item>
 
