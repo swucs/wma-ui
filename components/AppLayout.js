@@ -33,17 +33,17 @@ const AppLayout = ({ children }) => {
             >
                 <div className="logo" style={{ margin: '38px 10px 0' }} />
                 <Menu theme="dark" mode="inline" selectedKeys={selectedKeys}>
+                    <Menu.Item key="/warehousing" icon={<UploadOutlined />}>
+                        <Link href="/warehousing">입출고</Link>
+                    </Menu.Item>
                     <Menu.Item key="/customer" icon={<UserOutlined />}>
                         <Link href="/customer">거래처</Link>
                     </Menu.Item>
                     <Menu.Item key="/item" icon={<VideoCameraOutlined />}>
                         <Link href="/item">품목</Link>
                     </Menu.Item>
-                    <Menu.Item key="/warehousing" icon={<UploadOutlined />}>
-                        <Link href="/warehousing">입출고</Link>
-                    </Menu.Item>
                     <Menu.Item key="4" icon={<UserOutlined />}>
-                        단가
+                        <Link href="/storageFee">보관료</Link>
                     </Menu.Item>
                 </Menu>
             </Sider>

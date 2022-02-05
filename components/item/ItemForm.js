@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin, Popconfirm, InputNumber } from 'antd';
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
-import { setItems, setDetailItem, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/itemStore';
+import { setItems, setItem, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/itemStore';
 
 const { Option } = Select;
 
@@ -38,7 +38,7 @@ const ItemForm = () => {
 
 		// alert(JSON.stringify(item));
 		//사용자가 상세정보를 state에 저장
-		dispatch(setDetailItem({...item}));
+		dispatch(setItem({...item}));
 
 		//로딩바
 		dispatch(setDetailLoadingBar(true));
@@ -100,7 +100,7 @@ const ItemForm = () => {
 				));
 
 				//상세정보 갱신
-				// dispatch(setDetailItem({...response.data}));
+				// dispatch(setItem({...response.data}));
 
 			})
 			.catch((error) => {

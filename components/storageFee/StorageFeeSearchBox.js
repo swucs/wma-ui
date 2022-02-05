@@ -3,13 +3,14 @@ import { useDispatch } from "react-redux";
 // import { searchScreener } from "../reducers";
 import { Button, Col, Row, Form, Input, InputNumber, Space } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
-import { queryItems, setItem, setDetailModalVisible } from '../../reducers/itemStore';
-
+import { queryStorageFees, setStorageFeeItem, setDetailModalVisible } from '../../reducers/storageFeeStore';
+import moment from 'moment';
+import { DATE_FORMAT_YYYYMMDD } from  "../../utils/formatUtil";
 
 const { Search } = Input;
 
 
-const ItemSearchBox = () => {
+const StorageFeeSearchBox = () => {
 
 	const dispatch = useDispatch();
 
@@ -18,7 +19,7 @@ const ItemSearchBox = () => {
 	//신규버튼
 	const handleClick = () => {
 		//비어있는 상세정보 세팅
-		dispatch(setItem({}));
+		dispatch(setStorageFeeItem({baseDate : moment(new Date()).format(DATE_FORMAT_YYYYMMDD)}));
 
 		//상세팝업 띄우기
 		dispatch(setDetailModalVisible(true));
@@ -26,7 +27,7 @@ const ItemSearchBox = () => {
 
 	//검색처리
 	const handleSearch = (value) => {
-		dispatch(queryItems({name : value}));
+		dispatch(queryStorageFees({name : value}));
 	}
 
     return (
@@ -39,7 +40,7 @@ const ItemSearchBox = () => {
 				<Space>
 					<Search
 						type="text"
-						placeholder="품목명"
+						placeholder="보관료명"
 						enterButton="Search"
 						allowClear
 						size="normal"
@@ -59,4 +60,4 @@ const ItemSearchBox = () => {
 
 }
 
-export default ItemSearchBox;
+export default StorageFeeSearchBox;

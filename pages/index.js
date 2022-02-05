@@ -11,15 +11,15 @@ const Index = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-    	try {
-    		const loginAdmin = sessionStorage.getItem("loginAdmin");
-    		if (loginAdmin) {
-    			router.push('/customer');
-    		}
-    	} catch (error) {
-    		//error 발생한 경우 정상로그인 아닌 것으로 간주
-    		console.log(error);
-    	}
+    	// try {
+    	// 	const loginAdmin = sessionStorage.getItem("loginAdmin");
+    	// 	if (loginAdmin) {
+    	// 		router.push('/customer');
+    	// 	}
+    	// } catch (error) {
+    	// 	//error 발생한 경우 정상로그인 아닌 것으로 간주
+    	// 	console.log(error);
+    	// }
 
     }, []);
 
@@ -42,8 +42,8 @@ const Index = () => {
         console.log(response.headers.adminid);
         sessionStorage.setItem("loginAdmin", response.headers.authorization);
 
-        //customer 페이지로 이동
-			  router.push('/customer');
+        //입출고 페이지로 이동
+			  router.push('/warehousing');
 			})
 			.catch((error) => {
 

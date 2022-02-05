@@ -12,6 +12,10 @@
     background: #fff;
   }
 
+  .ant-layout {
+    background: #fff;
+  }
+
   .ant-layout-sider-zero-width-trigger {
       top : 0px;
   }

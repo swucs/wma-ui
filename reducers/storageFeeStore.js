@@ -3,25 +3,33 @@ const initialState = {
         name: null,
     }, 
 	isDetailModalVisible: false,	//상세 Modal창 출력여부
-	items: [],					    //품목목록
-	detailItem: {},				    //품목상세데이터
+	storageFees: [],				//보관료목록
+	storageFeeItem: {},				//보관료상세데이터
 	isListLoadingBar: false,		//목록 로딩바
 	isDetailLoadingBar: false,		//상세 로딩바
 };
 
 
 //Action creator
-export const queryItems = (data) => {
+export const queryStorageFees = (data) => {
     return {
-        type: 'QUERY_ITEMS',
+        type: 'QUERY_STORAGE_FEES',
         data
     };
 };
 
-//품목목록 출력
-export const setItems = (data) => {
+//보관료목록 출력
+export const setStorageFees = (data) => {
     return {
-        type: 'SET_ITEMS',
+        type: 'SET_STORAGE_FEES',
+        data
+    };
+};
+
+//상세 보관료정보 세팅
+export const setStorageFeeItem = (data) => {
+    return {
+        type: 'SET_STORAGE_FEE_ITEM',
         data
     };
 };
@@ -42,14 +50,6 @@ export const setDetailModalVisible = (data) => {
     };
 };
 
-//상세 품목정보 세팅
-export const setItem = (data) => {
-    return {
-        type: 'SET_DETAIL_ITEM',
-        data
-    };
-};
-
 //상세팝업 로딩바 출력
 export const setDetailLoadingBar = (data) => {
     return {
@@ -59,9 +59,9 @@ export const setDetailLoadingBar = (data) => {
 };
 
 
-export const itemStore = (state = initialState, action) => {
+export const storageFeeStore = (state = initialState, action) => {
     switch (action.type) {
-        case 'QUERY_ITEMS': {
+        case 'QUERY_STORAGE_FEES': {
             return {
                 ...state,
                 searchWord: {
@@ -69,10 +69,10 @@ export const itemStore = (state = initialState, action) => {
                 }
             }
         }
-		case 'SET_ITEMS': {
+		case 'SET_STORAGE_FEES': {
             return {
                 ...state,
-                items: [...action.data],
+                storageFees: [...action.data],
             }
         }
 		case 'SET_LIST_LOADING_BAR': {
@@ -87,10 +87,10 @@ export const itemStore = (state = initialState, action) => {
                 isDetailModalVisible: action.data,
             }
         }
-		case 'SET_DETAIL_ITEM': {
+		case 'SET_STORAGE_FEE_ITEM': {
             return {
                 ...state,
-                detailItem: {...action.data},
+                storageFeeItem: {...action.data},
             }
         }
 		case 'SET_DETAIL_LOADING_BAR': {
@@ -107,4 +107,4 @@ export const itemStore = (state = initialState, action) => {
     }
 };
 
-export default itemStore;
+export default storageFeeStore;
