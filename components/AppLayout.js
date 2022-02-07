@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { Layout, Menu } from 'antd';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { UploadOutlined, UserOutlined, VideoCameraOutlined, AreaChartOutlined, StockOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
+const { SubMenu } = Menu;
 
 // React.useLayoutEffect = React.useEffect;
 
@@ -42,9 +43,14 @@ const AppLayout = ({ children }) => {
                     <Menu.Item key="/item" icon={<VideoCameraOutlined />}>
                         <Link href="/item">품목</Link>
                     </Menu.Item>
-                    <Menu.Item key="4" icon={<UserOutlined />}>
+                    <Menu.Item key="/storageFee" icon={<UserOutlined />}>
                         <Link href="/storageFee">보관료</Link>
                     </Menu.Item>
+                    <SubMenu key="statistics" icon={<AreaChartOutlined />} title="통계">
+                        <Menu.Item key="/customerItemTerm" icon={<StockOutlined />}>
+                            <Link href="/customerItemTerm">거래처/품목별</Link>
+                        </Menu.Item>
+                    </SubMenu>
                 </Menu>
             </Sider>
             <Layout>
