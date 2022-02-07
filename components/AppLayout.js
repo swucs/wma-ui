@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { Layout, Menu } from 'antd';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined, AreaChartOutlined, StockOutlined } from '@ant-design/icons';
+import { UploadOutlined, UserOutlined, VideoCameraOutlined, AreaChartOutlined, StockOutlined, UserSwitchOutlined, ApartmentOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -33,13 +33,24 @@ const AppLayout = ({ children }) => {
                 // }}
             >
                 <div className="logo" style={{ margin: '38px 10px 0' }} />
-                <Menu theme="dark" mode="inline" selectedKeys={selectedKeys}>
+                <Menu
+                    theme="dark"
+                    mode="inline"
+                    selectedKeys={selectedKeys}
+                    defaultOpenKeys={[ 'customer', 'statistics' ]}
+                >
+
                     <Menu.Item key="/warehousing" icon={<UploadOutlined />}>
                         <Link href="/warehousing">입출고</Link>
                     </Menu.Item>
-                    <Menu.Item key="/customer" icon={<UserOutlined />}>
-                        <Link href="/customer">거래처</Link>
-                    </Menu.Item>
+                    <SubMenu key="customer" icon={<UserSwitchOutlined />} title="거래처">
+                        <Menu.Item key="/customer" icon={<UserOutlined />}>
+                            <Link href="/customer">거래처</Link>
+                        </Menu.Item>
+                        <Menu.Item key="/customerItem" icon={<ApartmentOutlined />}>
+                            <Link href="/customerItem">거래처별 품목</Link>
+                        </Menu.Item>
+                    </SubMenu>
                     <Menu.Item key="/item" icon={<VideoCameraOutlined />}>
                         <Link href="/item">품목</Link>
                     </Menu.Item>
