@@ -56,34 +56,36 @@ const CustomerItemTermList = () => {
             dataIndex: 'itemName',
             key: 'itemName',
 			align: 'left',
+            fixed: 'left',
+            width: 160
         },
         {
             title: '입고량',
             dataIndex: 'incomingQtyText',
             key: 'incomingQtyText',
             align: 'center',
-            // width: 180,
+            width: 140,
         },
 		{
             title: '출고량',
             dataIndex: 'outgoingQtyText',
             key: 'outgoingQtyText',
 			align: 'center',
-            // width: 250,
+            width: 140,
         },
         {
           title: '재고량',
           dataIndex: 'stockQtyText',
           key: 'stockQtyText',
           align: 'center',
-        //   width: 250,
+          width: 170,
         },
         {
             title: '최근입출고일',
             dataIndex: 'recentBaseDate',
             key: 'recentBaseDate',
             align: 'center',
-            // width: 250,
+            width: 140,
         },
     ];
       
@@ -93,7 +95,7 @@ const CustomerItemTermList = () => {
                 columns={columns}
                 dataSource={newData}
                 loading={isListLoadingBar}
-                scroll={{ x: 700, y: scrollY}} 
+                scroll={{ y: scrollY }}
                 pagination={false}
                 
             />

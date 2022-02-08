@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space } from "antd";
+import {message, Space} from "antd";
 import AppLayout from "../components/AppLayout";
 import StorageFeeSearchBox from "../components/storageFee/StorageFeeSearchBox";
 import StorageFeeList from "../components/storageFee/StorageFeeList";
@@ -46,7 +46,7 @@ const storageFee = () => {
 			dispatch(setListLoadingBar(false));
 		})
 		.catch((error) => {
-			alert('에러발생');
+			message.error('에러발생');
 			console.log(error);
 		});
 

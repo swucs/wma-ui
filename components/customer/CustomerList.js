@@ -66,55 +66,64 @@ const CustomerList = () => {
             dataIndex: 'id',
             key: 'id',
 			align: 'center',
-            width: 70,
+            width: 60,
+            fixed: 'left',
         },
         {
-          title: '업체명',
-          dataIndex: 'name',
-          key: 'name',
-          align: 'left',
-		  width: 210,
-          render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
+            title: '업체명',
+            dataIndex: 'name',
+            key: 'name',
+            align: 'left',
+            width: 170,
+            render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
+            fixed: 'left',
         },
 		{
             title: '전화번호',
             dataIndex: 'phoneNumber',
             key: 'phoneNumber',
 			align: 'center',
+            width: 150,
         },
         {
-          title: '사업자번호',
-          dataIndex: 'businessNumber',
-          key: 'businessNumber',
-          align: 'center',
+            title: '사업자번호',
+            dataIndex: 'businessNumber',
+            key: 'businessNumber',
+            align: 'center',
+            width: 140,
         },
         {
             title: '대표자명',
             dataIndex: 'representativeName',
             key: 'representativeName',
             align: 'center',
+            width: 90,
         },
         {
             title: 'Fax',
             dataIndex: 'faxNumber',
             key: 'faxNumber',
 			align: 'center',
+            width: 150,
         },
         {
-          title: '업태',
-          key: 'businessConditions',
-          dataIndex: 'businessConditions',
+            title: '업태',
+            key: 'businessConditions',
+            dataIndex: 'businessConditions',
+            width: 140,
         },
         {
             title: '업종',
             dataIndex: 'typeOfBusiness',
             key: 'typeOfBusiness',
+            width: 250,
         },
         {
             title: '사용여부',
             dataIndex: 'useYn',
             key: 'useYn',
 			align: 'center',
+            width: 100,
 			render: useYn => (
 				<>
 					{useYn == 'Y' ? "사용" : "미사용"}
@@ -124,12 +133,12 @@ const CustomerList = () => {
     ];
       
     return (
-        <div style={{height: scrollY + 65}}>
+        <div style={{height: scrollY}}>
             <Table
                 columns={columns}
                 dataSource={newData}
                 loading={isListLoadingBar}
-                scroll={{ x: 1280, y: scrollY}} 
+                scroll={{ y: scrollY}}
                 pagination={false /*{position: ['none', 'bottomCenter']}*/}
                 
             />

@@ -67,28 +67,30 @@ const ItemList = () => {
             key: 'id',
 			align: 'center',
             width: 70,
+			fixed: 'left',
         },
         {
-          title: '품목명',
-          dataIndex: 'name',
-          key: 'name',
-          align: 'left',
-		//   width: 350,
-          render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
+			title: '품목명',
+			dataIndex: 'name',
+			key: 'name',
+			align: 'left',
+			width: 160,
+			fixed: 'left',
+			render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
         },
 		{
             title: '단위무게',
             dataIndex: 'unitWeight',
             key: 'unitWeight',
-			align: 'center',
-			width: 120,
+			align: 'right',
+			width: 100,
         },
         {
-          title: '단위명',
-          dataIndex: 'unitName',
-          key: 'unitName',
-          align: 'center',
-		  width: 100,
+			title: '단위명',
+			dataIndex: 'unitName',
+			key: 'unitName',
+			align: 'center',
+			width: 100,
         },
         {
             title: '최초등록일자',
@@ -111,7 +113,7 @@ const ItemList = () => {
 				columns={columns}
 				dataSource={newData}
 				loading={isListLoadingBar}
-				scroll={{ x: 850, y: scrollY}} 
+				scroll={{ y: scrollY}}
 				pagination={false /*{position: ['none', 'bottomCenter']}*/}
 				
 			/>

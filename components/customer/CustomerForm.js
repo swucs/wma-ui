@@ -69,7 +69,7 @@ const CustomerForm = () => {
 				if (error.response?.data?.errors != null) {
 					displayErrorMessage(error.response.data.errors);
 				} else {
-					alert('에러발생 : CustomerForm.js');
+					console.log('에러발생 : CustomerForm.js');
 				}
 				
 				//로딩바 감추기
@@ -106,7 +106,7 @@ const CustomerForm = () => {
 				if (error.response?.data?.errors != null) {
 					displayErrorMessage(error.response.data.errors);
 				} else {
-					alert('에러발생 : CustomerForm.js');
+					message.error('에러발생 : CustomerForm.js');
 				}
 				
 				//로딩바 감추기
@@ -161,7 +161,7 @@ const CustomerForm = () => {
 
 		})
 		.catch((error) => {
-			alert('에러발생 : CustomerForm.js');
+			message.error('에러발생 : CustomerForm.js');
 			//로딩바 감추기
 			dispatch(setDetailLoadingBar(false));
 			console.log(error);

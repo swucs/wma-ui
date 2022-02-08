@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space } from "antd";
+import {message, Space} from "antd";
 import AppLayout from "../components/AppLayout";
 import CustomerItemTermSearchBox from "../components/statistics/CustomerItemTermSearchBox";
 import CustomerItemTermList from "../components/statistics/CustomerItemTermList";
@@ -54,7 +54,7 @@ const customerItemTerm = () => {
 			dispatch(setListLoadingBar(false));
 		})
 		.catch((error) => {
-			alert('에러발생 : screener.js');
+			message.error('에러발생 : customerItemTerm.js');
 			console.log(error);
 		});
 

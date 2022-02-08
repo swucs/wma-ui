@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, Button, Form, Space, Table, Input, Divider} from 'antd';
+import {Modal, Button, Form, Space, Table, Input, Divider, message} from 'antd';
 import { useEffect, useState } from 'react';
 import axiosUtil from "../../utils/axiosUtil";
 
@@ -30,7 +30,7 @@ const PopupItemSearchList = (props) => {
 	//확인버튼
 	const handleSubmit = () => {
 		if (selectedItemRows.length == 0) {
-			alert("품목을 선택하세요.");
+			message.error("품목을 선택하세요.");
 			return;
 		}
 
@@ -79,7 +79,7 @@ const PopupItemSearchList = (props) => {
 				setListLoadingBar(false);
 			})
 			.catch((error) => {
-				alert('에러발생 : screener.js');
+				message.error('에러발생 : PopupItemSearchList.js');
 				console.log(error);
 			});
 
@@ -92,28 +92,30 @@ const PopupItemSearchList = (props) => {
 			dataIndex: 'id',
 			key: 'id',
 			align: 'center',
-			width: 70,
+			width: 60,
+			fixed: 'left',
 		},
 		{
 			title: '품목명',
 			dataIndex: 'name',
 			key: 'name',
 			align: 'left',
-			//   width: 350,
+			width: 120,
+			fixed: 'left',
 		},
 		{
 			title: '단위무게',
 			dataIndex: 'unitWeight',
 			key: 'unitWeight',
 			align: 'center',
-			width: 90,
+			width: 80,
 		},
 		{
 			title: '단위명',
 			dataIndex: 'unitName',
 			key: 'unitName',
 			align: 'center',
-			width: 100,
+			width: 80,
 		},
 		// {
 		// 	title: '최초등록일자',
@@ -178,7 +180,7 @@ const PopupItemSearchList = (props) => {
 							},
 						}}
 						loading={isListLoadingBar}
-						scroll={{ y: height - 70}}
+						scroll={{y: height - 70}}
 						pagination={false}
 					/>
 				</div>

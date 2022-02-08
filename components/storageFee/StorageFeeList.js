@@ -66,36 +66,38 @@ const StorageFeeList = () => {
             dataIndex: 'id',
             key: 'id',
 			align: 'center',
-            width: 70,
-        },
-		{
-            title: '기준일자',
-            dataIndex: 'baseDate',
-            key: 'baseDate',
-            align: 'center',
-			width: 180,
+            width: 60,
+			fixed: 'left',
         },
         {
-          title: '보관료명',
-          dataIndex: 'name',
-          key: 'name',
-          align: 'left',
-		//   width: 350,
-          render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
+			title: '보관료명',
+			dataIndex: 'name',
+			key: 'name',
+			align: 'left',
+			width: 140,
+			fixed: 'left',
+			render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
         },
+		{
+			title: '기준일자',
+			dataIndex: 'baseDate',
+			key: 'baseDate',
+			align: 'center',
+			width: 120,
+		},
 		{
             title: '보관료',
             dataIndex: 'storage',
             key: 'storage',
 			align: 'right',
-			width: 150,
+			width: 90,
         },
         {
           title: '상하차비',
           dataIndex: 'loading',
           key: 'loading',
           align: 'right',
-		  width: 150,
+		  width: 90,
         },
     ];
       
@@ -105,7 +107,7 @@ const StorageFeeList = () => {
 				columns={columns}
 				dataSource={newData}
 				loading={isListLoadingBar}
-				scroll={{ x: 850, y: scrollY}} 
+				scroll={{ y: scrollY}}
 				pagination={false /*{position: ['none', 'bottomCenter']}*/}
 				
 			/>

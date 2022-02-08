@@ -195,7 +195,7 @@ const WarehousingForm = () => {
 				if (error.response?.data?.errors != null) {
 					displayErrorMessage(error.response.data.errors);
 				} else {
-					alert('에러발생 : WarehousingForm.js');
+					message.error('에러발생 : WarehousingForm.js');
 				}
 				
 				//로딩바 감추기
@@ -242,7 +242,7 @@ const WarehousingForm = () => {
 				if (error.response?.data?.errors != null) {
 					displayErrorMessage(error.response.data.errors);
 				} else {
-					alert('에러발생 : WarehousingForm.js');
+					message.error('에러발생 : WarehousingForm.js');
 				}
 				
 				//로딩바 감추기
@@ -297,7 +297,7 @@ const WarehousingForm = () => {
 
 		})
 		.catch((error) => {
-			alert('에러발생 : WarehousingForm.js');
+			message.error('에러발생 : WarehousingForm.js');
 			//로딩바 감추기
 			dispatch(setDetailLoadingBar(false));
 			console.log(error);

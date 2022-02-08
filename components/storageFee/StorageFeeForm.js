@@ -74,7 +74,7 @@ const StorageFeeForm = () => {
 				if (error.response?.data?.errors != null) {
 					displayErrorMessage(error.response.data.errors);
 				} else {
-					alert('에러발생 : StorageFeeForm.js');
+					message.error('에러발생 : StorageFeeForm.js');
 				}
 				
 				//로딩바 감추기
@@ -114,7 +114,7 @@ const StorageFeeForm = () => {
 				if (error.response?.data?.errors != null) {
 					displayErrorMessage(error.response.data.errors);
 				} else {
-					alert('에러발생 : StorageFeeForm.js');
+					messsage.error('에러발생 : StorageFeeForm.js');
 				}
 				
 				//로딩바 감추기
@@ -169,7 +169,7 @@ const StorageFeeForm = () => {
 
 		})
 		.catch((error) => {
-			alert('에러발생 : StorageFeeForm.js');
+			message.error('에러발생 : StorageFeeForm.js');
 			//로딩바 감추기
 			dispatch(setDetailLoadingBar(false));
 			console.log(error);

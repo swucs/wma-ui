@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space } from "antd";
+import {message, Space} from "antd";
 import AppLayout from "../components/AppLayout";
 import CustomerSearchBox from "../components/customer/CustomerSearchBox";
 import CustomerList from "../components/customer/CustomerList";
@@ -46,7 +46,7 @@ const customer = () => {
 			dispatch(setListLoadingBar(false));
 		})
 		.catch((error) => {
-			alert('에러발생 : screener.js');
+			message.error('에러발생 : customer.js');
 			console.log(error);
 		});
 

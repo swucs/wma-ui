@@ -70,7 +70,7 @@ const ItemForm = () => {
 				if (error.response?.data?.errors != null) {
 					displayErrorMessage(error.response.data.errors);
 				} else {
-					alert('에러발생 : ItemForm.js');
+					message.error('에러발생 : ItemForm.js');
 				}
 				
 				//로딩바 감추기
@@ -107,7 +107,7 @@ const ItemForm = () => {
 				if (error.response?.data?.errors != null) {
 					displayErrorMessage(error.response.data.errors);
 				} else {
-					alert('에러발생 : ItemForm.js');
+					message.error('에러발생 : ItemForm.js');
 				}
 				
 				//로딩바 감추기

@@ -69,54 +69,56 @@ const CustomerItemList = () => {
             dataIndex: 'itemId',
             key: 'itemId',
 			align: 'center',
-            width: 100,
+            width: 80,
+			fixed: 'left',
         },
         {
-          title: '품목명',
-          dataIndex: 'itemName',
-          key: 'itemName',
-          align: 'left',
-		//   width: 350,
-          render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
+			title: '품목명',
+			dataIndex: 'itemName',
+			key: 'itemName',
+			align: 'left',
+			fixed: 'left',
+			width: 120,
+			render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
         },
 		{
             title: '단위무게',
             dataIndex: 'itemUnitWeight',
             key: 'itemUnitWeight',
 			align: 'right',
-			// width: 150,
+			width: 90,
         },
         {
-          title: '단위명',
-          dataIndex: 'itemUnitName',
-          key: 'itemUnitName',
-          align: 'center',
-		  // width: 150,
+			title: '단위명',
+			dataIndex: 'itemUnitName',
+			key: 'itemUnitName',
+			align: 'center',
+			width: 90,
         },
 		{
 			title: '보관료ID',
 			dataIndex: 'storageFeeId',
 			key: 'storageFeeId',
 			align: 'center',
-			width: 100,
+			width: 80,
 		},
 		{
 			title: '보관료명',
 			dataIndex: 'storageFeeName',
 			key: 'storageFeeName',
 			align: 'center',
-			// width: 150,
+			width: 150,
 		},
     ];
       
     return (
-		<div style={{height: scrollY + 65}}>
+		<div style={{height: scrollY}}>
 			<Table 
 				columns={columns}
 				dataSource={newData}
 				loading={isListLoadingBar}
-				scroll={{x: 700,  y: scrollY}}
-				pagination={false /*{position: ['none', 'bottomCenter']}*/}
+				scroll={{y: scrollY}}
+				pagination={false}
 				
 			/>
 		</div>

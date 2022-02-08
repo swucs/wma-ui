@@ -222,7 +222,7 @@ const CustomerItemForm = () => {
 
 		})
 		.catch((error) => {
-			alert('에러발생 : CustomerItemForm.js');
+			message.error('에러발생 : CustomerItemForm.js');
 			//로딩바 감추기
 			dispatch(setDetailLoadingBar(false));
 			console.log(error);

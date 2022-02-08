@@ -21,10 +21,7 @@ const WarehousingList = () => {
 	 */
 	const handleResize = () => {
 		console.log("handleResize: " + window.innerHeight);
-		// alert(gridRef.current.getBoundingClientRect().top);
-		// alert(window.innerHeight);
-		setScrollY(document.body.getBoundingClientRect().bottom - gridRef.current.getBoundingClientRect().top - 50);
-		// ant-space-item
+		setScrollY(window.innerHeight - 158);
 	}
 
 	/**
@@ -71,13 +68,16 @@ const WarehousingList = () => {
             dataIndex: 'baseDate',
             key: 'baseDate',
 			align: 'center',
-            width: 150,
+            width: 120,
+			fixed: 'left',
         },
         {
 			title: '거래처명',
 			dataIndex: 'customerName',
 			key: 'customerName',
 			align: 'left',
+			fixed: 'left',
+			width: 170,
 			render: (text, row) => <a onClick={() => { handlerClickName(row) }}>{text}</a>,
         },
 		{
@@ -85,21 +85,21 @@ const WarehousingList = () => {
             dataIndex: 'name',
             key: 'name',
 			align: 'center',
-			width: 150,
+			width: 100,
         },
         {
 			title: '입출고구분',
 			dataIndex: 'warehousingTypeName',
 			key: 'warehousingTypeName',
 			align: 'center',
-			width: 120,
+			width: 110,
         },
         {
             title: '동결입고',
             dataIndex: 'quickFrozenYn',
             key: 'quickFrozenYn',
             align: 'center',
-			width: 120,
+			width: 110,
         },
     ];
       
@@ -109,7 +109,7 @@ const WarehousingList = () => {
 				columns={columns}
 				dataSource={newData}
 				loading={isListLoadingBar}
-				scroll={{ x: 740, y: scrollY}} 
+				scroll={{ y: scrollY}}
 				pagination={false /*{position: ['none', 'bottomCenter']}*/}
 			/>
 		</div>

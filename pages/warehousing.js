@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space } from "antd";
+import { Space, message } from "antd";
 import AppLayout from "../components/AppLayout";
 import WarehousingSearchBox from "../components/warehousing/WarehousingSearchBox";
 import WarehousingList from "../components/warehousing/WarehousingList";
@@ -51,7 +51,7 @@ const warehousing = () => {
 			dispatch(setListLoadingBar(false));
 		})
 		.catch((error) => {
-			alert('에러발생 : screener.js');
+			message.error('에러발생 : warehousing.js');
 			console.log(error);
 		});
 

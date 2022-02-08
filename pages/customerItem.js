@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space } from "antd";
+import {message, Space} from "antd";
 import AppLayout from "../components/AppLayout";
 import CustomerItemSearchBox from "../components/customerItem/CustomerItemSearchBox";
 import CustomerItemList from "../components/customerItem/CustomerItemList";
@@ -51,7 +51,7 @@ const customerItem = () => {
 			dispatch(setListLoadingBar(false));
 		})
 		.catch((error) => {
-			alert('에러발생');
+			message.error('에러발생');
 			console.log(error);
 		});
 
