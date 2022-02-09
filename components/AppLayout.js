@@ -2,11 +2,21 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Layout, Menu } from 'antd';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined, AreaChartOutlined, StockOutlined, UserSwitchOutlined, ApartmentOutlined } from '@ant-design/icons';
+import { Layout, Menu, Typography } from 'antd';
+import {
+    UploadOutlined,
+    UserOutlined,
+    VideoCameraOutlined,
+    AreaChartOutlined,
+    StockOutlined,
+    UserSwitchOutlined,
+    ApartmentOutlined,
+    RightSquareOutlined
+} from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
+const { Title } = Typography;
 
 // React.useLayoutEffect = React.useEffect;
 
@@ -32,7 +42,10 @@ const AppLayout = ({ children }) => {
                 //   console.log(collapsed, type);
                 // }}
             >
-                <div className="logo" style={{ margin: '38px 10px 0' }} />
+                <div className="logo" style={{ margin: '10px 20px 0px' }}>
+                    <Title level={4} style={{ color: '#ffffff' }}>신영냉장</Title>
+                </div>
+
                 <Menu
                     theme="dark"
                     mode="inline"
