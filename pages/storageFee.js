@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {message, Space} from "antd";
+import {message, Space, Typography} from "antd";
 import AppLayout from "../components/AppLayout";
 import StorageFeeSearchBox from "../components/storageFee/StorageFeeSearchBox";
 import StorageFeeList from "../components/storageFee/StorageFeeList";
@@ -9,8 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import StorageFeeForm from '../components/storageFee/StorageFeeForm';
 import { setStorageFees, setListLoadingBar } from '../reducers/storageFeeStore';
 import withHOCCheckAuth from '../hoc/withHOCCheckAuth';
+import {RightSquareOutlined} from "@ant-design/icons";
 
 const storageFee = () => {
+
+	const { Title } = Typography;
 
 	const dispatch = useDispatch();
 
@@ -56,8 +59,9 @@ const storageFee = () => {
       
     return (
         <AppLayout>
-            <Space direction="vertical" style={{width :'100%'}}>
-                <StorageFeeSearchBox />
+			<Title level={4}><RightSquareOutlined /> 보관료</Title>
+			<Space direction="vertical" style={{width :'100%'}}>
+				<StorageFeeSearchBox />
                 <StorageFeeList />
 				<StorageFeeForm />
             </Space>

@@ -20,7 +20,7 @@ const CustomerList = () => {
 	 */
 	const handleResize = () => {
 		console.log("handleResize: " + window.innerHeight);
-		setScrollY(window.innerHeight - 158);
+		setScrollY(window.innerHeight - 190);
 	}
 
 	/**

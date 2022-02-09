@@ -86,10 +86,10 @@ const WarehousingSearchBox = () => {
 			<Space wrap>
 				
 				<Form.Item name="baseDateFrom" style={{margin: 0, display: 'inline-block'}}>
-					<DatePicker size="normal" style={{width:130}} />
+					<DatePicker size="normal" inputReadOnly={true} allowClear={false} style={{width:130}} />
 				</Form.Item>
 				<Form.Item name="baseDateTo" style={{margin: 0, display: 'inline-block'}}>
-					<DatePicker size="normal" style={{width:130}} />
+					<DatePicker size="normal" inputReadOnly={true} allowClear={false} style={{width:130}} />
 				</Form.Item>
 
 				<Form.Item name="warehousingTypeValue" style={{margin: 0, display: 'inline-block'}}>
@@ -97,6 +97,7 @@ const WarehousingSearchBox = () => {
 						onChange={handleChange}
 						style={{width:70}}
 						size="normal"
+						placeholder="입출"
 					>
 						<Option value="">전체</Option>
 						<Option value="INCOMING">입고</Option>

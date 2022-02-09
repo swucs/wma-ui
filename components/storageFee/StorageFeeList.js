@@ -20,7 +20,7 @@ const StorageFeeList = () => {
 	 */
 	const handleResize = () => {
 		console.log("handleResize: " + window.innerHeight);
-		setScrollY(window.innerHeight - 158);
+		setScrollY(window.innerHeight - 190);
 	}
 
 	/**
@@ -102,7 +102,7 @@ const StorageFeeList = () => {
     ];
       
     return (
-		<div style={{height: scrollY + 65}}>
+		<div style={{height: scrollY}}>
 			<Table 
 				columns={columns}
 				dataSource={newData}

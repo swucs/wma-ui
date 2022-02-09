@@ -86,6 +86,7 @@ const CustomerItemSearchBox = () => {
 					>
 						<Select
 							style={{ width: 200 }}
+							size="normal"
 							onChange={handleChangeCustomerId}
 						>
 							{customerCodes.map(code => (

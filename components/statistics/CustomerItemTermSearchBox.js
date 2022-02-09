@@ -79,10 +79,10 @@ const CustomerItemTermSearchBox = () => {
 				<Space wrap>
 					
 					<Form.Item name="baseDateFrom" style={{margin: 0, display: 'inline-block'}}>
-						<DatePicker size="normal" style={{width:130}} />
+						<DatePicker size="normal" inputReadOnly={true} allowClear={false} style={{width:130}} />
 					</Form.Item>
 					<Form.Item name="baseDateTo" style={{margin: 0, display: 'inline-block'}}>
-						<DatePicker size="normal" style={{width:130}} />
+						<DatePicker size="normal" inputReadOnly={true} allowClear={false} style={{width:130}} />
 					</Form.Item>
 
 					<Form.Item name="customerId" style={{margin: 0, display: 'inline-block'}}>

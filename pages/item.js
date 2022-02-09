@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {message, Space} from "antd";
+import {message, Space, Typography} from "antd";
 import AppLayout from "../components/AppLayout";
 import ItemSearchBox from "../components/item/ItemSearchBox";
 import ItemList from "../components/item/ItemList";
@@ -9,8 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import ItemForm from '../components/item/ItemForm';
 import { setItems, setListLoadingBar } from '../reducers/itemStore';
 import withHOCCheckAuth from '../hoc/withHOCCheckAuth';
+import {RightSquareOutlined} from "@ant-design/icons";
 
 const item = () => {
+
+	const { Title } = Typography;
 
 	const dispatch = useDispatch();
 
@@ -56,8 +59,9 @@ const item = () => {
       
     return (
         <AppLayout>
-            <Space direction="vertical" style={{width :'100%'}}>
-                <ItemSearchBox />
+			<Title level={4}><RightSquareOutlined /> 품목</Title>
+			<Space direction="vertical" style={{width :'100%'}}>
+				<ItemSearchBox />
                 <ItemList />
 				<ItemForm />
             </Space>

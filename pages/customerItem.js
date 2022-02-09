@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {message, Space} from "antd";
+import {message, Space, Typography} from "antd";
 import AppLayout from "../components/AppLayout";
 import CustomerItemSearchBox from "../components/customerItem/CustomerItemSearchBox";
 import CustomerItemList from "../components/customerItem/CustomerItemList";
@@ -9,8 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import CustomerItemForm from '../components/customerItem/CustomerItemForm';
 import { setCustomerItems, setListLoadingBar } from '../reducers/customerItemStore';
 import withHOCCheckAuth from '../hoc/withHOCCheckAuth';
+import {RightSquareOutlined} from "@ant-design/icons";
 
 const customerItem = () => {
+
+	const { Title } = Typography;
 
 	const dispatch = useDispatch();
 
@@ -61,7 +64,8 @@ const customerItem = () => {
       
     return (
         <AppLayout>
-            <Space direction="vertical" style={{width :'100%'}}>
+			<Title level={4}><RightSquareOutlined /> 거래처별 품목</Title>
+			<Space direction="vertical" style={{width :'100%'}}>
                 <CustomerItemSearchBox />
                 <CustomerItemList />
 				<CustomerItemForm />

@@ -376,7 +376,10 @@ const WarehousingForm = () => {
 						required: true,
 					}]}
 				>
-					<DatePicker disabled={isDisable}
+					<DatePicker
+						inputReadOnly={true}
+						allowClear={false}
+						disabled={isDisable}
 					/>
 				</Form.Item>
 

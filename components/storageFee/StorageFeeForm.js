@@ -240,7 +240,7 @@ const StorageFeeForm = () => {
 						required: true,
 					}]}
 				>
-					<DatePicker />
+					<DatePicker inputReadOnly={true} allowClear={false} />
 				</Form.Item>
 
 				<Form.Item

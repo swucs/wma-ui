@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {message, Space} from "antd";
+import {message, Space, Typography} from "antd";
 import AppLayout from "../components/AppLayout";
 import CustomerItemTermSearchBox from "../components/statistics/CustomerItemTermSearchBox";
 import CustomerItemTermList from "../components/statistics/CustomerItemTermList";
@@ -10,8 +10,11 @@ import { setCustomerItemTerms, setListLoadingBar } from '../reducers/customerIte
 import withHOCCheckAuth from '../hoc/withHOCCheckAuth';
 import moment from 'moment';
 import { DATE_FORMAT_YYYYMMDD } from  "../utils/formatUtil";
+import {RightSquareOutlined} from "@ant-design/icons";
 
 const customerItemTerm = () => {
+
+	const { Title } = Typography;
 
 	const dispatch = useDispatch();
 
@@ -64,8 +67,9 @@ const customerItemTerm = () => {
       
     return (
         <AppLayout>
-            <Space direction="vertical" style={{width :'100%'}}>
-                <CustomerItemTermSearchBox />
+			<Title level={4}><RightSquareOutlined /> 거래처/품목별</Title>
+			<Space direction="vertical" style={{width :'100%'}}>
+				<CustomerItemTermSearchBox />
                 <CustomerItemTermList />
             </Space>
 			

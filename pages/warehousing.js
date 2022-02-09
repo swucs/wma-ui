@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, message } from "antd";
+import { Space, message, Typography } from "antd";
 import AppLayout from "../components/AppLayout";
 import WarehousingSearchBox from "../components/warehousing/WarehousingSearchBox";
 import WarehousingList from "../components/warehousing/WarehousingList";
@@ -9,10 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import WarehousingForm from '../components/warehousing/WarehousingForm';
 import { setWarehousings, setListLoadingBar } from '../reducers/warehousingStore';
 import withHOCCheckAuth from '../hoc/withHOCCheckAuth';
-import moment from 'moment';
 import { DATE_FORMAT_YYYYMMDD } from  "../utils/formatUtil";
+import { RightSquareOutlined } from "@ant-design/icons";
 
 const warehousing = () => {
+
+	const { Title } = Typography;
 
 	const dispatch = useDispatch();
 
@@ -61,7 +63,8 @@ const warehousing = () => {
       
     return (
         <AppLayout>
-            <Space direction="vertical" style={{width :'100%'}}>
+			<Title level={4}><RightSquareOutlined /> 입출고</Title>
+			<Space direction="vertical" style={{width :'100%'}}>
                 <WarehousingSearchBox />
                 <WarehousingList />
 				<WarehousingForm />

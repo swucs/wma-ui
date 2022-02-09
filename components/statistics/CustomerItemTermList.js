@@ -20,7 +20,7 @@ const CustomerItemTermList = () => {
 	 */
 	const handleResize = () => {
 		console.log("handleResize: " + window.innerHeight);
-		setScrollY(window.innerHeight - 158);
+		setScrollY(window.innerHeight - 215);
 	}
 
 	useEffect(() => {
@@ -90,7 +90,7 @@ const CustomerItemTermList = () => {
     ];
       
     return (
-        <div style={{height: scrollY + 65}}>
+        <div style={{height: scrollY}}>
             <Table
                 columns={columns}
                 dataSource={newData}
