@@ -3,6 +3,7 @@ import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin, Popc
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
 import { setItems, setItem, setDetailLoadingBar, setDetailModalVisible } from '../../reducers/itemStore';
+import {setCustomerItems} from "../../reducers/customerItemStore";
 
 const { Option } = Select;
 
@@ -134,6 +135,47 @@ const ItemForm = () => {
 	}
 
 	/**
+	 * 삭제버튼 클릭 후 Confirm 시
+	 */
+	const handleConfirmDelete = () => {
+
+		//품목 삭제
+		axiosUtil({
+			url : `${process.env.NEXT_PUBLIC_API_URL}/api/item/${detailItem.id}`,
+			method : 'delete',
+		})
+			.then((response) => {
+				console.log(response.data);
+
+				//로딩바 감추기
+				dispatch(setDetailLoadingBar(false));
+
+				message.success('품목정보가 삭제되었습니다.');
+
+				//목록 갱신하기
+				dispatch(setItems(
+					items.filter(item => item.id != detailItem.id)
+				));
+
+				//팝업창 닫기
+				dispatch(setDetailModalVisible(false));
+
+			})
+			.catch((error) => {
+				if (error.response.status === 422) {
+					message.error(error.response.data);
+				} else {
+					message.error('에러발생 : ItemForm.js');
+				}
+				//로딩바 감추기
+				dispatch(setDetailLoadingBar(false));
+				console.log(error);
+			});
+
+	}
+
+
+	/**
 	 * 취소Alert창의 confirm 버튼
 	 */
 	const handleConfirmCancel = () => {
@@ -246,6 +288,22 @@ const ItemForm = () => {
 						<Button onClick={handleConfirmCancel}>
 							취소
 						</Button>
+
+						{
+							//신규가 아닌 경우만 삭제버튼 노출
+							detailItem.id &&
+							<Popconfirm
+								title="삭제하시겠습니까?"
+								onConfirm={handleConfirmDelete}
+								okText="Yes"
+								cancelText="No"
+							>
+								<Button type="primary">
+									삭제
+								</Button>
+							</Popconfirm>
+						}
+
 						<Button type="primary" htmlType="submit">
 							저장
 						</Button>

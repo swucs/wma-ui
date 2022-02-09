@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Modal, Form, Input, Select, Button, Divider, Space, message, Spin } from 'antd';
+import {Modal, Form, Input, Select, Button, Divider, Space, message, Spin, Popconfirm} from 'antd';
 import axiosUtil from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -222,7 +222,11 @@ const CustomerItemForm = () => {
 
 		})
 		.catch((error) => {
-			message.error('에러발생 : CustomerItemForm.js');
+			if (error.response.status === 422) {
+				message.error(error.response.data);
+			} else {
+				message.error('에러발생 : CustomerItemForm.js');
+			}
 			//로딩바 감추기
 			dispatch(setDetailLoadingBar(false));
 			console.log(error);
@@ -362,6 +366,21 @@ const CustomerItemForm = () => {
 							<Button onClick={handleConfirmCancel}>
 								취소
 							</Button>
+
+							{
+								//신규가 아닌 경우만 삭제버튼 노출
+								customerItemItem.id &&
+								<Popconfirm
+									title="삭제하시겠습니까?"
+									onConfirm={handleConfirmDelete}
+									okText="Yes"
+									cancelText="No"
+								>
+									<Button type="primary">
+										삭제
+									</Button>
+								</Popconfirm>
+							}
 
 							<Button type="primary" htmlType="submit">
 								저장
